@@ -1,0 +1,53 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - temp",
+            "request": "launch",
+            "mainClass": "temp.temp",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - convertToFile",
+            "request": "launch",
+            "mainClass": "model.convertToFile",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - diseasesTree",
+            "request": "launch",
+            "mainClass": "model.diseasesTree",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Treatment",
+            "request": "launch",
+            "mainClass": "registerview.Treatment",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Administrator",
+            "request": "launch",
+            "mainClass": "registerview.Administrator",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - MainView",
+            "request": "launch",
+            "mainClass": "registerview.MainView",
+            "projectName": "HospitalRegistration"
+        }
+    ]
+}
