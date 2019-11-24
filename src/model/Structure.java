@@ -100,7 +100,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
 
     }
 
-    public void setjRoot(DefaultMutableTreeNode t) {// 将HashMap遍历转换为JTree
+    public void setjRoot(DefaultMutableTreeNode t) {// 将HashMap遍历转换为JTree,这里只是在对根节点进行添加
         DiseaseType temp;
         if((temp=((DiseaseType)t.getUserObject())).subDiseaseTypes!=null){
             for(DiseaseType tempDiseaseType:temp.subDiseaseTypes){

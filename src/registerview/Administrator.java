@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 public class Administrator extends JPanel {
@@ -93,7 +94,7 @@ public class Administrator extends JPanel {
 						.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE))
 				.addContainerGap()));
 
-		tree=new JTree();
+		tree=new JTree(mainView.gController().gStructure().getJTreeroot());
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);//设置仅单选
 		scrollPane.setColumnHeaderView(tree);
 		setLayout(groupLayout);
@@ -116,9 +117,5 @@ public class Administrator extends JPanel {
 	public JTree getJTree(){
 		return tree;
 	}
-	public void setJTree(JTree jtree){
-		this.tree=jtree;
-	}
-	
 	
 }

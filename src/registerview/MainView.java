@@ -10,8 +10,13 @@ public class MainView extends JFrame {
     private TriagePanel triageJPanel;
     private Treatment treatment;
     private MainView mainView = this;
+    private Controller controller;
 
     public MainView() {
+        init();
+    }
+    public MainView(Controller controller){
+        this.controller=controller;
         init();
     }
 
@@ -51,7 +56,9 @@ public class MainView extends JFrame {
     public Treatment getTreatment(){
         return treatment;
     }
-
+    public Controller gController(){
+        return controller;
+    }
     
 
     public static void main(String[] args) {

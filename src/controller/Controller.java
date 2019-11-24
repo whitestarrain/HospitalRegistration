@@ -9,13 +9,8 @@ public class Controller {
     private MainView view;
 
     public Controller() {
-
-    }
-
-    public Controller(Structure structure, MainView view) {
-        this.structure = structure;
-        this.view = view;
-        initData(structure, view);  
+        structure=new Structure();
+        view=new MainView(this);
     }
 
 
@@ -26,13 +21,18 @@ public class Controller {
         initTreatMentData(structure, view);
     }
     public void initAdministatorData(Structure structure,MainView view){
-        view.getAdministrator().setJTree(structure.getJTree());//初始化jTree
-        
+       
     }
     public void initTriageData(Structure structure,MainView view){
 
     }
     public void initTreatMentData(Structure structure,MainView view){
 
+    }
+    public Structure gStructure(){
+        return structure;
     } 
+    public MainView gMainView(){
+        return view;
+    }
 }
