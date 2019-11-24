@@ -79,6 +79,12 @@ public class Treatment extends JPanel {
 		doctorBox = new JComboBox<String>();
 
 		medicineBox = new JComboBox<String>();
+
+		tree = new JTree(mainView.gController().gStructure().getJTreeroot());
+		tree.setBackground(Color.WHITE);
+		tree.setFont(new Font("宋体", Font.PLAIN, 15));
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// 设置仅单选
+
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
 				.createSequentialGroup()
@@ -145,10 +151,6 @@ public class Treatment extends JPanel {
 										.addGap(59)
 										.addComponent(textArea_1, GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)))));
 
-		tree = new JTree();
-		tree.setBackground(Color.WHITE);
-		tree.setFont(new Font("宋体", Font.PLAIN, 15));
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// 设置仅单选
 		scrollPane.setViewportView(tree);
 		setLayout(groupLayout);
 		this.setSize(600, 500);

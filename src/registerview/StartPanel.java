@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class StartPanel extends JPanel {
@@ -20,8 +21,8 @@ public class StartPanel extends JPanel {
     }
 
     public void init() {
-        this.setSize(600,500);
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        this.setSize(600, 500);
+        setLayout(new FlowLayout(FlowLayout.CENTER, 30, 40));
         administrator = new JButton("管理员");
         triage = new JButton("分诊");
         treatMent = new JButton("医生诊断");
@@ -44,8 +45,8 @@ public class StartPanel extends JPanel {
                 MainViewFrame.getTriPanel().setEnabled(true);
             }
         });
-        administrator.addActionListener(new ActionListener(){
-        
+        administrator.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainViewFrame.getStartPanel().setVisible(false);
@@ -54,10 +55,13 @@ public class StartPanel extends JPanel {
                 MainViewFrame.getAdministrator().setEnabled(true);
             }
         });
-        treatMent.addActionListener(new ActionListener(){
-        
+        treatMent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (MainViewFrame.getTriPanel().hasReview == false) {
+                    JOptionPane.showConfirmDialog(MainViewFrame, "请进行分诊", " ", 0);
+                    return;
+                }
                 MainViewFrame.getStartPanel().setVisible(false);
                 MainViewFrame.getStartPanel().setEnabled(false);
                 MainViewFrame.getTreatment().setVisible(true);

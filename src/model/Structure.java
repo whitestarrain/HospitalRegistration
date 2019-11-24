@@ -1,13 +1,14 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.JFrame;
-import javax.swing.JTree;
 
 public class Structure {
     private diseasesTree diseases;
@@ -15,14 +16,11 @@ public class Structure {
     private HashMap<String, Patient> patients;
     private HashMap<String, Doctor> doctors;
     private ArrayList<Records> recoders;
-    private JTree jTree;
-    // TODO
+    private priority_queue queue;// 排队病人
 
     public Structure() {
-        diseases = new diseasesTree();// 初始化病种树类
-
-        jTree=new JTree(diseases.getJRoot());
-        // 这里要new一个JTree（dise.getJRoot）
+        queue = new priority_queue();
+        diseases = new diseasesTree();
 
         // 其他数据通过HashmMap就行了，不需要重新写新类
         try {
@@ -43,16 +41,33 @@ public class Structure {
             e.printStackTrace();
             throw new RuntimeException("structure中成员从序列化文件中初始化失败");
         } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-    public JTree getJTree(){
-        return jTree;
-    }
-    public DefaultMutableTreeNode getJTreeroot(){//FIXME MAYBEDELE
+
+    public DefaultMutableTreeNode getJTreeroot() {// FIXME MAYBEDELE
         return diseases.getJRoot();
     }
+
+    public diseasesTree gDiseasesTree() {
+        return diseases;
+    }
+
+    public ArrayList<Patient> getNoProQueue() {// 得到未经排序的病人队列
+        return queue.getqueue();
+    }
+
+    public int getqueuelength() {// 获得总排队病人数量
+        return queue.length;
+    }
+
+    public ArrayList<Integer> getIsReview() {// 获得是否为复诊的队列
+        return queue.getIsReview();
+    }
+    public void SetToPriorityQueue() {
+        queue.SetToPriorityQueue();
+    }
+   
 }
 
 class diseasesTree {// 病种树类，使用HashMap存储
@@ -80,8 +95,8 @@ class diseasesTree {// 病种树类，使用HashMap存储
             }
         }
 
-        jRoot = new DefaultMutableTreeNode(root);//以“病”为JTreeroot节点
-        setjRoot(jRoot);//往jRoot上添加子节点
+        jRoot = new DefaultMutableTreeNode(root);// 以“病”为JTreeroot节点
+        setjRoot(jRoot);// 往jRoot上添加子节点
     }
 
     public void Trverse(DiseaseType t) {
@@ -102,13 +117,13 @@ class diseasesTree {// 病种树类，使用HashMap存储
 
     public void setjRoot(DefaultMutableTreeNode t) {// 将HashMap遍历转换为JTree,这里只是在对根节点进行添加
         DiseaseType temp;
-        if((temp=((DiseaseType)t.getUserObject())).subDiseaseTypes!=null){
-            for(DiseaseType tempDiseaseType:temp.subDiseaseTypes){
-                DefaultMutableTreeNode tempDefaultMutableTreeNode=new DefaultMutableTreeNode(tempDiseaseType);
+        if ((temp = ((DiseaseType) t.getUserObject())).subDiseaseTypes != null) {
+            for (DiseaseType tempDiseaseType : temp.subDiseaseTypes) {
+                DefaultMutableTreeNode tempDefaultMutableTreeNode = new DefaultMutableTreeNode(tempDiseaseType);
                 t.add(tempDefaultMutableTreeNode);
                 setjRoot(tempDefaultMutableTreeNode);
             }
-        }else{
+        } else {
             return;
         }
     }
@@ -117,17 +132,52 @@ class diseasesTree {// 病种树类，使用HashMap存储
 
     }
 
-    public DefaultMutableTreeNode getJRoot(){
+    public DefaultMutableTreeNode getJRoot() {
         return jRoot;
     }
+}
 
-    
-    public static void main(String[] args) {//FIXME DELETEME
-        diseasesTree a = new diseasesTree();
-        System.out.println(a.getJRoot());
-       JFrame j= new JFrame();
-       j.setBounds(200, 300, 600, 500);
-       j.setVisible(true);
-       j.add(new JTree(a.getJRoot()));
+class priority_queue {// 优先权队列构建
+    private ArrayList<Patient> queue;// 按时间顺序过来的所有患者,之后会进行优先级排序
+    private ArrayList<Integer> isReview;//存储0,1，上一个队列处0表示是，1表示否，与queue队列相对应
+    private boolean ispriority = false;
+    public int length;
+
+    public priority_queue() {
+        queueload();
+        isReview = new ArrayList<Integer>();
     }
+
+    public void queueload() {// 从文件中加载所有患者
+        queue = new ArrayList<Patient>();
+        BufferedReader read;
+        String str;
+        String[] arrtemp;
+        try {
+            read = new BufferedReader(new FileReader("source/waitpatient.txt"));
+            while ((str = read.readLine()) != null) {
+                arrtemp = str.split(" ");
+                queue.add(new Patient(arrtemp[0], arrtemp[1]));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        length = queue.size();
+    }
+
+    public void SetToPriorityQueue() {
+        // TODO 根据isReview进行排序
+
+        
+        ispriority = true;
+    }
+
+    public ArrayList<Patient> getqueue() {
+        return queue;
+    }
+
+    public ArrayList<Integer> getIsReview() {
+        return isReview;
+    }
+
 }

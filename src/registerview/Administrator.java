@@ -3,19 +3,25 @@ package registerview;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 public class Administrator extends JPanel {
@@ -26,14 +32,22 @@ public class Administrator extends JPanel {
 	private JButton button_1;
 	private JButton button_2;
 	private JLabel label;
-	private JTree tree;
 	private JButton button;
+	private DefaultTreeModel treeModel;
+	private JTree tree;
+	TreePath nowPath=null;//指向路径在右键点击时初始化
 
-	public Administrator(){
+	// 右键菜单
+	private JPopupMenu jp = new JPopupMenu();
+	private JMenuItem inquire = new JMenuItem("查询");
+	private JMenuItem delete = new JMenuItem("删除");
+
+	public Administrator() {
 
 	}
+
 	public Administrator(MainView mainView) {
-		this.mainView=mainView;
+		this.mainView = mainView;
 		init();
 		Event();
 	}
@@ -55,7 +69,16 @@ public class Administrator extends JPanel {
 
 		label = new JLabel("\u53F3\u952E\u8FDB\u884C\u4FEE\u6539\u6216\u8005\u67E5\u8BE2");
 
-		button = new JButton("\u8FD4\u56DE");//返回
+		button = new JButton("\u8FD4\u56DE");// 返回
+
+		treeModel = new DefaultTreeModel(mainView.gController().gStructure().getJTreeroot());
+		tree = new JTree(treeModel);
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// 设置仅单选
+
+		// 初始化右键菜单
+		jp.add(inquire);
+		jp.add(delete);
+
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 				groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup()
@@ -94,28 +117,65 @@ public class Administrator extends JPanel {
 						.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE))
 				.addContainerGap()));
 
-		tree=new JTree(mainView.gController().gStructure().getJTreeroot());
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);//设置仅单选
 		scrollPane.setColumnHeaderView(tree);
 		setLayout(groupLayout);
 
 		this.setVisible(false);
 		this.setEnabled(false);
 	}
-	private void Event(){
-		button.addActionListener(new ActionListener(){
-		
+
+	private void Event() {
+		button.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainView.getStartPanel().setVisible(true);
-                mainView.getStartPanel().setEnabled(true);
-                mainView.getAdministrator().setVisible(false);
-                mainView.getAdministrator().setEnabled(false);
+				mainView.getStartPanel().setEnabled(true);
+				mainView.getAdministrator().setVisible(false);
+				mainView.getAdministrator().setEnabled(false);
+			}
+		});
+		// TODO 右键小菜单进行查询和修改
+		// TODO*2文本框中输入信息进行查询
+
+		inquire.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		delete.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+
+			@Override
+			public void valueChanged(TreeSelectionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		tree.addMouseListener(new MouseAdapter() {//右键弹出菜单
+			public void mouseClicked(MouseEvent e) {
+				TreePath path = tree.getPathForLocation(e.getX(), e.getY());
+				if (e.getButton() == MouseEvent.BUTTON3 && path != null) {
+					jp.show(e.getComponent(), e.getX(), e.getY());
+					nowPath=path;//更新指向路径
+				}
 			}
 		});
 	}
-	public JTree getJTree(){
+
+	public JTree getJTree() {
 		return tree;
 	}
-	
+
 }
