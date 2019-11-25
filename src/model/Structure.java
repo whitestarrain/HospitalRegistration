@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -46,15 +47,36 @@ public class Structure {
         }
     }
 
-    public DefaultMutableTreeNode getJTreeroot() {// FIXME MAYBEDELE
+    public DefaultMutableTreeNode getJTreeroot() {
         return diseases.getJRoot();
     }
-    public  void treeTrverse(DefaultMutableTreeNode t,JTextArea a){//对外提供病类型遍历方法。
+
+    public void treeTrverse(DefaultMutableTreeNode t, JTextArea a) {// 对外提供病类型遍历方法。
+        diseasesTree.Trverse(t, a);
+    }
+
+    public void treeTrverse_noPatient(DiseaseType t, JTextArea a) {
+        if(t==null){
+            JOptionPane.showMessageDialog(a, "不存在该病种", "", 0);
+            return;
+        }
+        diseasesTree.Trverse_noPatient(t, a);
+    }
+
+    public void treeTrverse(DiseaseType t, JTextArea a) {
+        if(t==null){
+            JOptionPane.showMessageDialog(a, "不存在该病种", "", 0);
+            return;
+        }
         diseasesTree.Trverse(t, a);
     }
 
     public diseasesTree gDiseasesTree() {
         return diseases;
+    }
+
+    public DiseaseType searchDiseasesType(String s) {
+        return diseases.getDisease(s);
     }
 
     public ArrayList<Patient> getNoProQueue() {// 得到未经排序的病人队列
@@ -68,14 +90,16 @@ public class Structure {
     public ArrayList<Integer> getIsReview() {// 获得是否为复诊的队列
         return queue.getIsReview();
     }
+
     public void SetToPriorityQueue() {
         queue.SetToPriorityQueue();
     }
-   
+
 }
 
 class diseasesTree {// 病种树类，使用HashMap存储
     private HashMap<String, DiseaseType> diseases;
+    DiseaseType whichToSearch = null;
     private DiseaseType root;
     private DefaultMutableTreeNode jRoot;
 
@@ -102,19 +126,22 @@ class diseasesTree {// 病种树类，使用HashMap存储
         jRoot = new DefaultMutableTreeNode(root);// 以“病”为JTreeroot节点
         setjRoot(jRoot);// 往jRoot上添加子节点
     }
-    public void Trverse(){//每棵树本身从头遍历
+
+    public void Trverse() {// 每棵树本身从头遍历
         diseasesTree.Trverse(this.root);
     }
 
-    public static void Trverse(DiseaseType t) {//对外遍历方法，输出到控制台
+    static void Trverse(DiseaseType t) {// 对外遍历方法，输出到控制台
         if (t.patient != null) {
-            System.out.println(t.name);
-            for (String tempString : t.patient)
-                System.out.println(tempString);
+            // System.out.println(t.name);
+            for (String tempString : t.patient) {
+
+            }
+            // System.out.println(tempString);
         }
 
         if (t.subDiseaseTypes != null) {
-            System.out.println(t.name);
+            // System.out.println(t.name);
             for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
                 Trverse(tempDiseaseType);
             }
@@ -122,24 +149,36 @@ class diseasesTree {// 病种树类，使用HashMap存储
 
     }
 
-    public static void Trverse(DiseaseType t,JTextArea a){//对外遍历方法，输出到指定JTextArea
+    static void Trverse(DiseaseType t, JTextArea a) {// 对外遍历方法，输出到指定JTextArea
         if (t.patient != null) {
-            a.append(t.name+"\n");
+            a.append(t.name + "\n");
             for (String tempString : t.patient)
-                a.append(tempString+"\n");
+                a.append(tempString + "\n");
         }
 
         if (t.subDiseaseTypes != null) {
-            a.append(t.name+"\n");
+            a.append(t.name + "\n");
             for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
-                Trverse(tempDiseaseType,a);
+                Trverse(tempDiseaseType, a);
             }
         }
     }
-    public static void Trverse(DefaultMutableTreeNode t,JTextArea a){//当参数为DefaultMutableTreeNode时
-        DiseaseType temp=(DiseaseType)t.getUserObject();
+
+
+    static void Trverse(DefaultMutableTreeNode t, JTextArea a) {// 当参数为DefaultMutableTreeNode时
+        DiseaseType temp = (DiseaseType) t.getUserObject();
         diseasesTree.Trverse(temp, a);
     }
+
+    static void Trverse_noPatient(DiseaseType t, JTextArea a) {//不返回病人的遍历方法
+        if (t.subDiseaseTypes != null) {
+            a.append(t.name + "\n");
+            for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
+                Trverse_noPatient(tempDiseaseType, a);
+            }
+        }
+    }
+
     public void setjRoot(DefaultMutableTreeNode t) {// 将HashMap遍历转换为JTree,这里只是在对根节点进行添加
         DiseaseType temp;
         if ((temp = ((DiseaseType) t.getUserObject())).subDiseaseTypes != null) {
@@ -160,11 +199,32 @@ class diseasesTree {// 病种树类，使用HashMap存储
     public DefaultMutableTreeNode getJRoot() {
         return jRoot;
     }
+
+    public DiseaseType getDisease(String s) {//查找病类
+        if(whichToSearch!=null&&s!=whichToSearch.name){//当再次查找时如果是同一个，则按步骤查找，否则还原whichtosearch为null
+            whichToSearch=null;
+        }
+        getDisease(root, s);
+        return whichToSearch;
+    }
+
+    private void getDisease(DiseaseType t, String s) {//查找病类
+        if (t.name.equals(s)) {
+            whichToSearch = t;
+            return;
+        }
+        if (t.subDiseaseTypes != null) {
+            // System.out.println(t.name);
+            for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
+                getDisease(tempDiseaseType, s);
+            }
+        }
+    }
 }
 
 class priority_queue {// 优先权队列构建
     private ArrayList<Patient> queue;// 按时间顺序过来的所有患者,之后会进行优先级排序
-    private ArrayList<Integer> isReview;//存储0,1，上一个队列处0表示是，1表示否，与queue队列相对应
+    private ArrayList<Integer> isReview;// 存储0,1，上一个队列处0表示是，1表示否，与queue队列相对应
     private boolean ispriority = false;
     public int length;
 
@@ -193,7 +253,6 @@ class priority_queue {// 优先权队列构建
     public void SetToPriorityQueue() {
         // TODO 根据isReview进行排序
 
-        
         ispriority = true;
     }
 

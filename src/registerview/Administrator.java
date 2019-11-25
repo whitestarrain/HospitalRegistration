@@ -37,7 +37,7 @@ public class Administrator extends JPanel {
 	private JButton button;
 	private DefaultTreeModel treeModel;
 	private JTree tree;
-	private boolean jTextField_has_clicked=false;//记录是否为第一次点击，是的话清空内容
+	private boolean jTextField_has_clicked = false;// 记录是否为第一次点击，是的话清空内容
 	TreePath nowPath = null;// 指向路径在右键点击时初始化
 
 	// 右键菜单
@@ -176,34 +176,43 @@ public class Administrator extends JPanel {
 			}
 		});
 
-		textField.addMouseListener(new MouseAdapter() {//实现第一次点击后清空文本
-			public void mouseReleased(MouseEvent e){
-				if(jTextField_has_clicked==false){
+		textField.addMouseListener(new MouseAdapter() {// 实现第一次点击后清空文本
+			public void mouseReleased(MouseEvent e) {
+				if (jTextField_has_clicked == false) {
 					textField.setText("");
 					textField.revalidate();
-					jTextField_has_clicked=true;
+					jTextField_has_clicked = true;
 				}
 			}
 		});
 
-		button_1.addActionListener(new ActionListener(){
-		
+		button_1.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String s=textField.getText();
-				if(s==null||s.matches("[ ]*")){
-					JOptionPane.showMessageDialog(mainView, "请输入文本","",0);
+				String s = textField.getText();
+				if (s == null || s.matches("[ ]*")) {
+					JOptionPane.showMessageDialog(mainView, "请输入文本", "", 0);
+					return;
 				}
+				textArea.setText("");
+				mainView.gController().gStructure()
+						.treeTrverse(mainView.gController().gStructure().searchDiseasesType(s), textArea);
 			}
+
 		});
-		button_2.addActionListener(new ActionListener(){
-		
+		button_2.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String s=textField.getText();
-				if(s==null||s.matches("[ ]*")){
-					JOptionPane.showMessageDialog(mainView, "请输入文本","",0);
+				String s = textField.getText();
+				if (s == null || s.matches("[ ]*")) {
+					JOptionPane.showMessageDialog(mainView, "请输入文本", "", 0);
+					return;
 				}
+				textArea.setText("");
+				mainView.gController().gStructure()
+						.treeTrverse_noPatient(mainView.gController().gStructure().searchDiseasesType(s), textArea);
 			}
 		});
 	}
