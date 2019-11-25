@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JTextArea;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class Structure {
@@ -47,6 +48,9 @@ public class Structure {
 
     public DefaultMutableTreeNode getJTreeroot() {// FIXME MAYBEDELE
         return diseases.getJRoot();
+    }
+    public  void treeTrverse(DefaultMutableTreeNode t,JTextArea a){//对外提供病类型遍历方法。
+        diseasesTree.Trverse(t, a);
     }
 
     public diseasesTree gDiseasesTree() {
@@ -98,8 +102,11 @@ class diseasesTree {// 病种树类，使用HashMap存储
         jRoot = new DefaultMutableTreeNode(root);// 以“病”为JTreeroot节点
         setjRoot(jRoot);// 往jRoot上添加子节点
     }
+    public void Trverse(){//每棵树本身从头遍历
+        diseasesTree.Trverse(this.root);
+    }
 
-    public void Trverse(DiseaseType t) {
+    public static void Trverse(DiseaseType t) {//对外遍历方法，输出到控制台
         if (t.patient != null) {
             System.out.println(t.name);
             for (String tempString : t.patient)
@@ -115,6 +122,24 @@ class diseasesTree {// 病种树类，使用HashMap存储
 
     }
 
+    public static void Trverse(DiseaseType t,JTextArea a){//对外遍历方法，输出到指定JTextArea
+        if (t.patient != null) {
+            a.append(t.name+"\n");
+            for (String tempString : t.patient)
+                a.append(tempString+"\n");
+        }
+
+        if (t.subDiseaseTypes != null) {
+            a.append(t.name+"\n");
+            for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
+                Trverse(tempDiseaseType,a);
+            }
+        }
+    }
+    public static void Trverse(DefaultMutableTreeNode t,JTextArea a){//当参数为DefaultMutableTreeNode时
+        DiseaseType temp=(DiseaseType)t.getUserObject();
+        diseasesTree.Trverse(temp, a);
+    }
     public void setjRoot(DefaultMutableTreeNode t) {// 将HashMap遍历转换为JTree,这里只是在对根节点进行添加
         DiseaseType temp;
         if ((temp = ((DiseaseType) t.getUserObject())).subDiseaseTypes != null) {

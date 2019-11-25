@@ -20,6 +20,7 @@ import javax.swing.JTree;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -35,7 +36,7 @@ public class Administrator extends JPanel {
 	private JButton button;
 	private DefaultTreeModel treeModel;
 	private JTree tree;
-	TreePath nowPath=null;//指向路径在右键点击时初始化
+	TreePath nowPath = null;// 指向路径在右键点击时初始化
 
 	// 右键菜单
 	private JPopupMenu jp = new JPopupMenu();
@@ -63,8 +64,8 @@ public class Administrator extends JPanel {
 
 		button_2 = new JButton("查询病种");
 
-		textField = new JTextField();
-		textField.setBackground(Color.WHITE);
+		textField = new JTextField("请输入病类");
+		
 		textField.setColumns(10);
 
 		label = new JLabel("\u53F3\u952E\u8FDB\u884C\u4FEE\u6539\u6216\u8005\u67E5\u8BE2");
@@ -142,33 +143,35 @@ public class Administrator extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
+				textArea.setText("");
+				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) nowPath.getLastPathComponent();
+				mainView.gController().gStructure().treeTrverse(temp, textArea);
 			}
 		});
 		delete.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
+				// 未修改文件
+				treeModel.removeNodeFromParent((DefaultMutableTreeNode) nowPath.getLastPathComponent());
 			}
 		});
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
-				// TODO Auto-generated method stub
-
+				textArea.setText("");
+				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+				mainView.gController().gStructure().treeTrverse(temp, textArea);
 			}
 		});
 
-		tree.addMouseListener(new MouseAdapter() {//右键弹出菜单
+		tree.addMouseListener(new MouseAdapter() {// 右键弹出菜单
 			public void mouseClicked(MouseEvent e) {
 				TreePath path = tree.getPathForLocation(e.getX(), e.getY());
 				if (e.getButton() == MouseEvent.BUTTON3 && path != null) {
 					jp.show(e.getComponent(), e.getX(), e.getY());
-					nowPath=path;//更新指向路径
+					nowPath = path;// 更新指向路径
 				}
 			}
 		});

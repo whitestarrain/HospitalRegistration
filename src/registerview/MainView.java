@@ -59,9 +59,4 @@ public class MainView extends JFrame {
     public Controller gController(){
         return controller;
     }
-    
-
-    public static void main(String[] args) {
-        new MainView();
-    }
 }

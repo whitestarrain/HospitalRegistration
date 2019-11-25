@@ -1,7 +1,6 @@
 package controller;
 
 import model.Structure;
-import registerview.Administrator;
 import registerview.MainView;
 
 public class Controller {
@@ -12,7 +11,6 @@ public class Controller {
         structure=new Structure();
         view=new MainView(this);
     }
-
 
 
     // public void initData(Structure structure,MainView view){//将view中的数据初始化
