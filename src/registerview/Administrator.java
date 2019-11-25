@@ -1,6 +1,5 @@
 package registerview;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -30,6 +29,7 @@ public class Administrator extends JPanel {
 	private MainView mainView;
 	private JTextField textField;
 	private JScrollPane scrollPane;
+	private JScrollPane scrollPane_1;
 	private JTextArea textArea;
 	private JButton button_1;
 	private JButton button_2;
@@ -71,6 +71,7 @@ public class Administrator extends JPanel {
 		label = new JLabel("\u53F3\u952E\u8FDB\u884C\u4FEE\u6539\u6216\u8005\u67E5\u8BE2");
 
 		button = new JButton("\u8FD4\u56DE");// 返回
+		scrollPane_1 = new JScrollPane();
 
 		treeModel = new DefaultTreeModel(mainView.gController().gStructure().getJTreeroot());
 		tree = new JTree(treeModel);
@@ -92,7 +93,7 @@ public class Administrator extends JPanel {
 												GroupLayout.PREFERRED_SIZE))
 										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 												.addGroup(groupLayout.createSequentialGroup().addGap(47).addComponent(
-														textArea, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+														scrollPane_1, GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
 												.addGroup(groupLayout.createSequentialGroup().addGap(68)
 														.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 97,
 																GroupLayout.PREFERRED_SIZE)
@@ -115,10 +116,11 @@ public class Administrator extends JPanel {
 				.addGap(18)
 				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 393, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE))
 				.addContainerGap()));
 
 		scrollPane.setColumnHeaderView(tree);
+		scrollPane_1.setViewportView(textArea);
 		setLayout(groupLayout);
 
 		this.setVisible(false);
