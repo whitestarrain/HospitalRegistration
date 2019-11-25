@@ -59,7 +59,7 @@ public class StartPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (MainViewFrame.getTriPanel().hasReview == false) {
-                    JOptionPane.showConfirmDialog(MainViewFrame, "请进行分诊", " ", 0);
+                    JOptionPane.showMessageDialog(MainViewFrame, "请进行分诊","",0);
                     return;
                 }
                 MainViewFrame.getStartPanel().setVisible(false);

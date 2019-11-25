@@ -11,6 +11,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -36,6 +37,7 @@ public class Administrator extends JPanel {
 	private JButton button;
 	private DefaultTreeModel treeModel;
 	private JTree tree;
+	private boolean jTextField_has_clicked=false;//记录是否为第一次点击，是的话清空内容
 	TreePath nowPath = null;// 指向路径在右键点击时初始化
 
 	// 右键菜单
@@ -65,8 +67,6 @@ public class Administrator extends JPanel {
 		button_2 = new JButton("查询病种");
 
 		textField = new JTextField("请输入病类");
-		
-		textField.setColumns(10);
 
 		label = new JLabel("\u53F3\u952E\u8FDB\u884C\u4FEE\u6539\u6216\u8005\u67E5\u8BE2");
 
@@ -172,6 +172,37 @@ public class Administrator extends JPanel {
 				if (e.getButton() == MouseEvent.BUTTON3 && path != null) {
 					jp.show(e.getComponent(), e.getX(), e.getY());
 					nowPath = path;// 更新指向路径
+				}
+			}
+		});
+
+		textField.addMouseListener(new MouseAdapter() {//实现第一次点击后清空文本
+			public void mouseReleased(MouseEvent e){
+				if(jTextField_has_clicked==false){
+					textField.setText("");
+					textField.revalidate();
+					jTextField_has_clicked=true;
+				}
+			}
+		});
+
+		button_1.addActionListener(new ActionListener(){
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String s=textField.getText();
+				if(s==null||s.matches("[ ]*")){
+					JOptionPane.showMessageDialog(mainView, "请输入文本","",0);
+				}
+			}
+		});
+		button_2.addActionListener(new ActionListener(){
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String s=textField.getText();
+				if(s==null||s.matches("[ ]*")){
+					JOptionPane.showMessageDialog(mainView, "请输入文本","",0);
 				}
 			}
 		});
