@@ -42,7 +42,6 @@ public class TriagePanel extends JPanel implements ActionListener {
                     return;
                 }
                 int i = 0;
-                // TODO 1
                 // System.out.println(mainView.gController().gStructure().getqueue());
                 // FIXMENOTE ?成员对象的方法以及变量无法调用，在这里加.size错误,因为无法导入priority_queue包，该包不可见
 
@@ -53,8 +52,8 @@ public class TriagePanel extends JPanel implements ActionListener {
                     i++;
                     //是为0，否为1
                 }
+                mainView.gController().gStructure().SetToPriorityQueue();
                 hasReview=true;
-               mainView.gController().gStructure().SetToPriorityQueue();
             }
         });
         back.addActionListener(this);

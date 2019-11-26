@@ -56,7 +56,7 @@ public class Structure {
     }
 
     public void treeTrverse_noPatient(DiseaseType t, JTextArea a) {
-        if(t==null){
+        if (t == null) {
             JOptionPane.showMessageDialog(a, "不存在该病种", "", 0);
             return;
         }
@@ -64,7 +64,7 @@ public class Structure {
     }
 
     public void treeTrverse(DiseaseType t, JTextArea a) {
-        if(t==null){
+        if (t == null) {
             JOptionPane.showMessageDialog(a, "不存在该病种", "", 0);
             return;
         }
@@ -164,13 +164,12 @@ class diseasesTree {// 病种树类，使用HashMap存储
         }
     }
 
-
     static void Trverse(DefaultMutableTreeNode t, JTextArea a) {// 当参数为DefaultMutableTreeNode时
         DiseaseType temp = (DiseaseType) t.getUserObject();
         diseasesTree.Trverse(temp, a);
     }
 
-    static void Trverse_noPatient(DiseaseType t, JTextArea a) {//不返回病人的遍历方法
+    static void Trverse_noPatient(DiseaseType t, JTextArea a) {// 不返回病人的遍历方法
         if (t.subDiseaseTypes != null) {
             a.append(t.name + "\n");
             for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
@@ -200,15 +199,15 @@ class diseasesTree {// 病种树类，使用HashMap存储
         return jRoot;
     }
 
-    public DiseaseType getDisease(String s) {//查找病类
-        if(whichToSearch!=null&&s!=whichToSearch.name){//当再次查找时如果是同一个，则按步骤查找，否则还原whichtosearch为null
-            whichToSearch=null;
+    public DiseaseType getDisease(String s) {// 查找病类
+        if (whichToSearch != null && s != whichToSearch.name) {// 当再次查找时如果是同一个，则按步骤查找，否则还原whichtosearch为null
+            whichToSearch = null;
         }
         getDisease(root, s);
         return whichToSearch;
     }
 
-    private void getDisease(DiseaseType t, String s) {//查找病类
+    private void getDisease(DiseaseType t, String s) {// 查找病类
         if (t.name.equals(s)) {
             whichToSearch = t;
             return;
@@ -225,11 +224,13 @@ class diseasesTree {// 病种树类，使用HashMap存储
 class priority_queue {// 优先权队列构建
     private ArrayList<Patient> queue;// 按时间顺序过来的所有患者,之后会进行优先级排序
     private ArrayList<Integer> isReview;// 存储0,1，上一个队列处0表示是，1表示否，与queue队列相对应
-    private boolean ispriority = false;
+    private int count = 0;// 记录出队数量
+    public boolean ispriority = false;
     public int length;
 
     public priority_queue() {
         queueload();
+        length = queue.size();
         isReview = new ArrayList<Integer>();
     }
 
@@ -247,14 +248,35 @@ class priority_queue {// 优先权队列构建
         } catch (Exception e) {
             e.printStackTrace();
         }
-        length = queue.size();
     }
 
     public void SetToPriorityQueue() {
-        // TODO 根据isReview进行排序
-
+        // TODO 根据isReview进行排序,使复诊病人均匀插在初诊病人中
+        ArrayList<Patient> temp = new ArrayList<Patient>(length);
+        ArrayList<Patient> tempNotReviewed = new ArrayList<Patient>();
+        ArrayList<Patient> tempHasReviewed = new ArrayList<Patient>();
+        for (int i = 0; i < length; i++) {// 将有病与没病的分离
+            if (isReview.get(i) == 0) {
+                tempHasReviewed.add(queue.get(i));
+            } else {
+                tempNotReviewed.add(queue.get(i));
+            }
+        }
+        int gap = (int) Math.floor((double) tempNotReviewed.size() / tempHasReviewed.size());// 获得均匀插入的间隔，最小为1
+        for (int i = 0, it = 0; i < tempNotReviewed.size(); it++) {
+            for (int j = 0; j < gap; j++) {
+                temp.add(tempNotReviewed.get(i));
+                i++;
+                j++;
+            }
+            temp.add(tempHasReviewed.get(it));
+        }
         ispriority = true;
+        queue = temp;
     }
+    // public void addToPriotityQueue(){
+    // TODO 也许可以这样实现，在每次如的时候进行排列一次
+    // }
 
     public ArrayList<Patient> getqueue() {
         return queue;
@@ -262,6 +284,16 @@ class priority_queue {// 优先权队列构建
 
     public ArrayList<Integer> getIsReview() {
         return isReview;
+    }
+
+    public Patient pop() {// 得到队列中的下一个病人
+        if (count == queue.size())
+            return null;
+        return queue.get(count++);
+    }
+
+    public void reload() {// 当一个队列结束后重新载入
+        queueload();
     }
 
 }

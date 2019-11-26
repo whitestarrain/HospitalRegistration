@@ -31,7 +31,3 @@ class Patient implements Serializable {// 病人
         return Integer.valueOf(ID);
     }
 }
-
-
-
-
