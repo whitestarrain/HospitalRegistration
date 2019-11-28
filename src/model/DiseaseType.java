@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 class DiseaseType implements Serializable {// 病类
-    /**
-     *
-     */
     private static final long serialVersionUID = 5881895164579111309L;
     String ID;
     String name;
@@ -51,5 +48,8 @@ class DiseaseType implements Serializable {// 病类
 
     public String toString() {
         return name;
+    }
+    public String getID(){
+        return ID;
     }
 }

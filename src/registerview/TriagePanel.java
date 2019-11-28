@@ -38,7 +38,7 @@ public class TriagePanel extends JPanel implements ActionListener {
         begin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if(hasReview==true){
-                    JOptionPane.showConfirmDialog(triagePanel, "已经设置完毕，请返回", "请选择", 0);
+                    JOptionPane.showMessageDialog(mainView, "已设置完毕，请返回","",0);
                     return;
                 }
                 int i = 0;

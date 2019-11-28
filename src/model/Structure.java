@@ -2,9 +2,11 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,7 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class Structure {
-    private diseasesTree diseases;
+    private diseasesTree diseases;//只在更新文件时用了下，其他时候没动过
     private HashMap<String, Medicine> medicines;
     private HashMap<String, Patient> patients;
     private HashMap<String, Doctor> doctors;
@@ -95,19 +97,26 @@ public class Structure {
         queue.SetToPriorityQueue();
     }
 
+    public DefaultMutableTreeNode addSubDis(DefaultMutableTreeNode par, String s) {//返回子病对应节点
+        return new DefaultMutableTreeNode(diseases.addSubDis((DiseaseType) par.getUserObject(), s));
+    }
+    public void writeToFile_Tree(){
+        diseases.reWriteFile();
+    }
 }
 
 class diseasesTree {// 病种树类，使用HashMap存储
-    private HashMap<String, DiseaseType> diseases;
+    private HashMap<String, DiseaseType> diseasesMap;
     DiseaseType whichToSearch = null;
     private DiseaseType root;
     private DefaultMutableTreeNode jRoot;
+    private int number = 0;
 
     public diseasesTree() {// 从默认序列文件中读取数据初始化对象
         ObjectInputStream in = null;
         try {
             in = new ObjectInputStream(new FileInputStream("objectfiles/diseases.HashMap"));
-            diseases = (HashMap<String, DiseaseType>) in.readObject();
+            diseasesMap = (HashMap<String, DiseaseType>) in.readObject();
             in.close();
             in = new ObjectInputStream(new FileInputStream("objectfiles/root.DiseaseType"));
             root = (DiseaseType) in.readObject();
@@ -125,14 +134,18 @@ class diseasesTree {// 病种树类，使用HashMap存储
 
         jRoot = new DefaultMutableTreeNode(root);// 以“病”为JTreeroot节点
         setjRoot(jRoot);// 往jRoot上添加子节点
+        Trverse();// 初始化number数量
+       // System.out.println(number);
     }
 
     public void Trverse() {// 每棵树本身从头遍历
-        diseasesTree.Trverse(this.root);
+        Trverse(this.root);
     }
 
-    static void Trverse(DiseaseType t) {// 对外遍历方法，输出到控制台
+    private void Trverse(DiseaseType t) {// 初始化病的数量，为ID编号方便
+        number++;
         if (t.patient != null) {
+
             // System.out.println(t.name);
             for (String tempString : t.patient) {
 
@@ -216,6 +229,35 @@ class diseasesTree {// 病种树类，使用HashMap存储
             // System.out.println(t.name);
             for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
                 getDisease(tempDiseaseType, s);
+            }
+        }
+    }
+
+    public DiseaseType addSubDis(DiseaseType parentDis, String subDisNmae) {// 在parentDis节点下面添加subDisName病种,并返回实例化对象的引用
+        DiseaseType tempdis = getDisease(parentDis.name);// 得到父病种
+        DiseaseType temp = new DiseaseType(String.valueOf(++number + 200), subDisNmae, tempdis.ID);// 实例化子病种
+        diseasesMap.put(String.valueOf(number + 200), temp);//更新HashMap
+        tempdis.addsubdesease(temp);// 父病种中添加子病种引用
+        System.out.println(diseasesMap);
+        return temp;
+    }
+
+    public void reWriteFile() {// 更新文件
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/diseases.HashMap"));
+            out.writeObject(diseasesMap);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("文件更新异常");
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("输出流关闭异常");
             }
         }
     }

@@ -44,6 +44,7 @@ public class Administrator extends JPanel {
 	private JPopupMenu jp = new JPopupMenu();
 	private JMenuItem inquire = new JMenuItem("查询");
 	private JMenuItem delete = new JMenuItem("删除");
+	private JMenuItem additem = new JMenuItem("添加");
 
 	public Administrator() {
 
@@ -80,6 +81,7 @@ public class Administrator extends JPanel {
 		// 初始化右键菜单
 		jp.add(inquire);
 		jp.add(delete);
+		jp.add(additem);
 
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -132,6 +134,18 @@ public class Administrator extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int i=JOptionPane.showConfirmDialog(mainView, "一旦离开修改将记录？请确定", "warning", 0);
+				if(i==0){
+					try {
+						mainView.gController().gStructure().writeToFile_Tree();
+					} catch (Exception a) {
+						a.printStackTrace();
+						throw new RuntimeException("文件重写失败");
+					}
+				}else{
+					return;
+				}
+
 				mainView.getStartPanel().setVisible(true);
 				mainView.getStartPanel().setEnabled(true);
 				mainView.getAdministrator().setVisible(false);
@@ -150,12 +164,23 @@ public class Administrator extends JPanel {
 				mainView.gController().gStructure().treeTrverse(temp, textArea);
 			}
 		});
-		delete.addActionListener(new ActionListener() {
+		delete.addActionListener(new ActionListener() {// 删除选项
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 未修改文件
 				treeModel.removeNodeFromParent((DefaultMutableTreeNode) nowPath.getLastPathComponent());
+			}
+		});
+		additem.addActionListener(new ActionListener() {// 添加选项
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String tempdis = JOptionPane.showInputDialog(mainView, "请输入病种名称");
+				DefaultMutableTreeNode tempnode = (DefaultMutableTreeNode) nowPath.getLastPathComponent();
+				tempnode.add(mainView.gController().gStructure().addSubDis(tempnode, tempdis));// 修改对应HashMap，并返回子病节点引用包装后的DefaultMutableTreeNode,然后添加到当前选中的那个节点中
+				treeModel.reload();
+				//TODO刷新文件
+
 			}
 		});
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
