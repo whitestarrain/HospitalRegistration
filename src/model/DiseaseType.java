@@ -59,4 +59,7 @@ class DiseaseType implements Serializable {// 病类
     public boolean removeSubDis(DiseaseType dele){//删除某子病种
         return subDiseaseTypes.remove(dele);
     }
+    public String getParID(){
+        return parentID;
+    }
 }

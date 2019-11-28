@@ -108,14 +108,18 @@ public class Structure {
     public boolean hasTreeMoidfy() {
         return diseases.hasModify();
     }
+
+    public void deleNode(DefaultMutableTreeNode a) {
+        diseases.deleteNode((DiseaseType) a.getUserObject());
+    }
 }
 
 class diseasesTree {// 病种树类，使用HashMap存储
-    private HashMap<String, DiseaseType> diseasesMap;
+    private HashMap<String, DiseaseType> diseasesMap;// 只有在移除和添加元素时使用了HashMap方法，其他情况下都没用
     DiseaseType whichToSearch = null;
     private DiseaseType root;
     private DefaultMutableTreeNode jRoot;
-    private int number = 0;
+    private int number = 0;// 嗯，，，优化了添加算法似乎不需要这个了
     private boolean hasModify = false;
 
     public diseasesTree() {// 从默认序列文件中读取数据初始化对象
@@ -142,8 +146,8 @@ class diseasesTree {// 病种树类，使用HashMap存储
         setjRoot(jRoot);// 往jRoot上添加子节点
         Trverse();// 初始化number数量
         // System.out.println(number);
-       // System.out.println(diseasesMap);
-        //System.out.println();
+        // System.out.println(diseasesMap);
+        // System.out.println();
     }
 
     public void Trverse() {// 每棵树本身从头遍历
@@ -171,14 +175,13 @@ class diseasesTree {// 病种树类，使用HashMap存储
     }
 
     static void Trverse(DiseaseType t, JTextArea a) {// 对外遍历方法，输出到指定JTextArea
+        a.append(t.name + "\n");
         if (t.patient != null) {
-            a.append(t.name + "\n");
             for (String tempString : t.patient)
                 a.append(tempString + "\n");
         }
 
         if (t.subDiseaseTypes != null) {
-            a.append(t.name + "\n");
             for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
                 Trverse(tempDiseaseType, a);
             }
@@ -237,14 +240,24 @@ class diseasesTree {// 病种树类，使用HashMap存储
         }
     }
 
+    public String getLdleID() {// 获得闲置ID，可能是中间删除后的，也可能是最后一个
+        int i = 201;
+        while (true) {
+            if (getDiseaseByID(String.valueOf(i)) == null) {
+                return i + "";
+            }
+            i++;
+        }
+    }
+
     public DiseaseType addSubDis(DiseaseType parentDis, String subDisNmae) {// 在parentDis节点下面添加subDisName病种,并返回实例化对象的引用
         DiseaseType tempdis = getDisease(parentDis.name);// 得到父病种
-        DiseaseType temp = new DiseaseType(String.valueOf(++number + 200), subDisNmae, tempdis.ID);// 实例化子病种
+        DiseaseType temp = new DiseaseType(getLdleID(), subDisNmae, tempdis.ID);// 实例化子病种
         tempdis.addsubdesease(temp);// 父病种中添加子病种引用 //一开始这里反了
         // diseasesMap.put(tempdis.getID(),tempdis);//FIXME 不知道为什么和tempdis中的不一样
         // 不是这里的错误，是root忘了重写
-        diseasesMap.put(String.valueOf(number + 200), temp);// 更新HashMap
-       // System.out.println(diseasesMap);
+        diseasesMap.put(temp.getID(), temp);// 更新HashMap
+        // System.out.println(diseasesMap);
         hasModify = true;// 将是否修改标记改为true
         return temp;
     }
@@ -267,11 +280,34 @@ class diseasesTree {// 病种树类，使用HashMap存储
             throw new RuntimeException("文件更新异常");
         } finally {
         }
-      //  System.out.println(diseasesMap);
+        // System.out.println(diseasesMap);
     }
 
-    public void deleteNode(DiseaseType dele) {
+    public DiseaseType getDiseaseByID(String ID) {// 单参数查找
+        return getDiseaseByID(root, ID);
+    }
 
+    public DiseaseType getDiseaseByID(DiseaseType t, String s) {// 根据ID查找，比根据name查找的那个算法要优化些
+        if (t.getID().equals(s)) {
+            return t;
+        }
+        if (t.subDiseaseTypes != null) {
+            // System.out.println(t.name);
+            for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
+
+                if (getDiseaseByID(tempDiseaseType, s) != null) {
+                    return tempDiseaseType;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void deleteNode(DiseaseType dele) {// 文件系统中删除，需要移除父病种对其引用，移除HashMap中的元素
+        DiseaseType parDiseaseType = getDiseaseByID(dele.getParID());
+        parDiseaseType.removeSubDis(dele);// 移除父病种对其引用
+        diseasesMap.remove(dele.getID());// 没办法,HashMap的移除机制不清楚，应该使用ArrayList来存储的的
+        hasModify = true;
     }
 }
 
