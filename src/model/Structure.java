@@ -15,7 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class Structure {
-    private diseasesTree diseases;//只在更新文件时用了下，其他时候没动过
+    private diseasesTree diseases;// 只在更新文件时用了下，其他时候没动过
     private HashMap<String, Medicine> medicines;
     private HashMap<String, Patient> patients;
     private HashMap<String, Doctor> doctors;
@@ -97,11 +97,16 @@ public class Structure {
         queue.SetToPriorityQueue();
     }
 
-    public DefaultMutableTreeNode addSubDis(DefaultMutableTreeNode par, String s) {//返回子病对应节点
+    public DefaultMutableTreeNode addSubDis(DefaultMutableTreeNode par, String s) {// 返回子病对应节点
         return new DefaultMutableTreeNode(diseases.addSubDis((DiseaseType) par.getUserObject(), s));
     }
-    public void writeToFile_Tree(){
+
+    public void writeToFile_Tree() {
         diseases.reWriteFile();
+    }
+
+    public boolean hasTreeMoidfy() {
+        return diseases.hasModify();
     }
 }
 
@@ -111,6 +116,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
     private DiseaseType root;
     private DefaultMutableTreeNode jRoot;
     private int number = 0;
+    private boolean hasModify = false;
 
     public diseasesTree() {// 从默认序列文件中读取数据初始化对象
         ObjectInputStream in = null;
@@ -135,7 +141,9 @@ class diseasesTree {// 病种树类，使用HashMap存储
         jRoot = new DefaultMutableTreeNode(root);// 以“病”为JTreeroot节点
         setjRoot(jRoot);// 往jRoot上添加子节点
         Trverse();// 初始化number数量
-       // System.out.println(number);
+        // System.out.println(number);
+       // System.out.println(diseasesMap);
+        //System.out.println();
     }
 
     public void Trverse() {// 每棵树本身从头遍历
@@ -204,10 +212,6 @@ class diseasesTree {// 病种树类，使用HashMap存储
         }
     }
 
-    public void dataFlush() {// 当数据有所改变时覆盖重写序列文件
-
-    }
-
     public DefaultMutableTreeNode getJRoot() {
         return jRoot;
     }
@@ -236,10 +240,17 @@ class diseasesTree {// 病种树类，使用HashMap存储
     public DiseaseType addSubDis(DiseaseType parentDis, String subDisNmae) {// 在parentDis节点下面添加subDisName病种,并返回实例化对象的引用
         DiseaseType tempdis = getDisease(parentDis.name);// 得到父病种
         DiseaseType temp = new DiseaseType(String.valueOf(++number + 200), subDisNmae, tempdis.ID);// 实例化子病种
-        diseasesMap.put(String.valueOf(number + 200), temp);//更新HashMap
-        tempdis.addsubdesease(temp);// 父病种中添加子病种引用
-        System.out.println(diseasesMap);
+        tempdis.addsubdesease(temp);// 父病种中添加子病种引用 //一开始这里反了
+        // diseasesMap.put(tempdis.getID(),tempdis);//FIXME 不知道为什么和tempdis中的不一样
+        // 不是这里的错误，是root忘了重写
+        diseasesMap.put(String.valueOf(number + 200), temp);// 更新HashMap
+       // System.out.println(diseasesMap);
+        hasModify = true;// 将是否修改标记改为true
         return temp;
+    }
+
+    public boolean hasModify() {// 返回是否修改树
+        return hasModify;
     }
 
     public void reWriteFile() {// 更新文件
@@ -247,19 +258,20 @@ class diseasesTree {// 病种树类，使用HashMap存储
         try {
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/diseases.HashMap"));
             out.writeObject(diseasesMap);
+            out.close();
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/root.DiseaseType"));
+            out.writeObject(root);
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("文件更新异常");
         } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException("输出流关闭异常");
-            }
         }
+      //  System.out.println(diseasesMap);
+    }
+
+    public void deleteNode(DiseaseType dele) {
+
     }
 }
 

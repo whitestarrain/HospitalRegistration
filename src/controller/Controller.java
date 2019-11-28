@@ -11,7 +11,9 @@ public class Controller {
         structure=new Structure();
         view=new MainView(this);
     }
-
+    public boolean hasDiseaseTreeModify(){
+        return structure.hasTreeMoidfy();
+    }
 
     // public void initData(Structure structure,MainView view){//将view中的数据初始化
     //     initAdministatorData(structure, view);

@@ -134,16 +134,18 @@ public class Administrator extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int i=JOptionPane.showConfirmDialog(mainView, "一旦离开修改将记录？请确定", "warning", 0);
-				if(i==0){
-					try {
-						mainView.gController().gStructure().writeToFile_Tree();
-					} catch (Exception a) {
-						a.printStackTrace();
-						throw new RuntimeException("文件重写失败");
+				if (mainView.gController().hasDiseaseTreeModify()) {
+					int i = JOptionPane.showConfirmDialog(mainView, "一旦离开修改将记录？请确定", "warning", 0);
+					if (i == 0) {
+						try {
+							mainView.gController().gStructure().writeToFile_Tree();
+						} catch (Exception a) {
+							a.printStackTrace();
+							throw new RuntimeException("文件重写失败");
+						}
+					} else {
+						return;
 					}
-				}else{
-					return;
 				}
 
 				mainView.getStartPanel().setVisible(true);
@@ -179,7 +181,7 @@ public class Administrator extends JPanel {
 				DefaultMutableTreeNode tempnode = (DefaultMutableTreeNode) nowPath.getLastPathComponent();
 				tempnode.add(mainView.gController().gStructure().addSubDis(tempnode, tempdis));// 修改对应HashMap，并返回子病节点引用包装后的DefaultMutableTreeNode,然后添加到当前选中的那个节点中
 				treeModel.reload();
-				//TODO刷新文件
+				// TODO刷新文件
 
 			}
 		});
