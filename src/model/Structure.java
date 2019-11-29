@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -115,7 +116,6 @@ public class Structure {
 }
 
 class diseasesTree {// 病种树类，使用HashMap存储
-    private HashMap<String, DiseaseType> diseasesMap;// 只有在移除和添加元素时使用了HashMap方法，其他情况下都没用
     DiseaseType whichToSearch = null;
     private DiseaseType root;
     private DefaultMutableTreeNode jRoot;
@@ -125,9 +125,6 @@ class diseasesTree {// 病种树类，使用HashMap存储
     public diseasesTree() {// 从默认序列文件中读取数据初始化对象
         ObjectInputStream in = null;
         try {
-            in = new ObjectInputStream(new FileInputStream("objectfiles/diseases.HashMap"));
-            diseasesMap = (HashMap<String, DiseaseType>) in.readObject();
-            in.close();
             in = new ObjectInputStream(new FileInputStream("objectfiles/root.DiseaseType"));
             root = (DiseaseType) in.readObject();
         } catch (Exception e) {
@@ -256,7 +253,6 @@ class diseasesTree {// 病种树类，使用HashMap存储
         tempdis.addsubdesease(temp);// 父病种中添加子病种引用 //一开始这里反了
         // diseasesMap.put(tempdis.getID(),tempdis);//FIXME 不知道为什么和tempdis中的不一样
         // 不是这里的错误，是root忘了重写
-        diseasesMap.put(temp.getID(), temp);// 更新HashMap
         // System.out.println(diseasesMap);
         hasModify = true;// 将是否修改标记改为true
         return temp;
@@ -269,9 +265,6 @@ class diseasesTree {// 病种树类，使用HashMap存储
     public void reWriteFile() {// 更新文件
         ObjectOutputStream out = null;
         try {
-            out = new ObjectOutputStream(new FileOutputStream("objectfiles/diseases.HashMap"));
-            out.writeObject(diseasesMap);
-            out.close();
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/root.DiseaseType"));
             out.writeObject(root);
             out.close();
@@ -281,7 +274,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         } finally {
         }
         // System.out.println(diseasesMap);
-        hasModify=false;
+        hasModify = false;
     }
 
     public DiseaseType getDiseaseByID(String ID) {// 单参数查找
@@ -305,14 +298,19 @@ class diseasesTree {// 病种树类，使用HashMap存储
     }
 
     public void deleteNode(DiseaseType dele) {// 文件系统中删除，需要移除父病种对其引用，移除HashMap中的元素
-        if(dele.subDiseaseTypes!=null){//当为病种文件夹时，先删除子病，再删除该病
-            for(DiseaseType temp:dele.subDiseaseTypes){
-                deleteNode(temp);
+        if (dele.subDiseaseTypes != null) {// 当为病种文件夹时，先删除子病，再删除该病
+
+            Iterator<DiseaseType> it = dele.subDiseaseTypes.iterator();
+            if (dele.subDiseaseTypes.size() > 0 && it.hasNext()) {// 使用迭代器，从而有判断size的地方
+                deleteNode(it.next());
             }
+
+            // for(DiseaseType temp:dele.subDiseaseTypes){//FIXME for循环，或者迭代时修改容器中元素导致错误
+            // deleteNode(temp);
+            // }
         }
         DiseaseType parDiseaseType = getDiseaseByID(dele.getParID());
         parDiseaseType.removeSubDis(dele);// 移除父病种对其引用
-        diseasesMap.remove(dele.getID());// 没办法,HashMap的移除机制不清楚，应该使用ArrayList来存储的的
         hasModify = true;
     }
 }
