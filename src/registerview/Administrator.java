@@ -171,9 +171,9 @@ public class Administrator extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 未修改文件
-				treeModel.removeNodeFromParent((DefaultMutableTreeNode) nowPath.getLastPathComponent());
-				DefaultMutableTreeNode tempnode = (DefaultMutableTreeNode) nowPath.getLastPathComponent();
-				mainView.gController().deleNode(tempnode);
+				DefaultMutableTreeNode temp=(DefaultMutableTreeNode) nowPath.getLastPathComponent();
+				treeModel.removeNodeFromParent(temp);//从树中删除
+				mainView.gController().deleNode(temp);//从文件中删除
 			}
 		});
 		additem.addActionListener(new ActionListener() {// 添加选项

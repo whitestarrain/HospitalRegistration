@@ -281,6 +281,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         } finally {
         }
         // System.out.println(diseasesMap);
+        hasModify=false;
     }
 
     public DiseaseType getDiseaseByID(String ID) {// 单参数查找
@@ -296,7 +297,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
             for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
 
                 if (getDiseaseByID(tempDiseaseType, s) != null) {
-                    return tempDiseaseType;
+                    return getDiseaseByID(tempDiseaseType, s);
                 }
             }
         }
@@ -304,6 +305,11 @@ class diseasesTree {// 病种树类，使用HashMap存储
     }
 
     public void deleteNode(DiseaseType dele) {// 文件系统中删除，需要移除父病种对其引用，移除HashMap中的元素
+        if(dele.subDiseaseTypes!=null){//当为病种文件夹时，先删除子病，再删除该病
+            for(DiseaseType temp:dele.subDiseaseTypes){
+                deleteNode(temp);
+            }
+        }
         DiseaseType parDiseaseType = getDiseaseByID(dele.getParID());
         parDiseaseType.removeSubDis(dele);// 移除父病种对其引用
         diseasesMap.remove(dele.getID());// 没办法,HashMap的移除机制不清楚，应该使用ArrayList来存储的的
