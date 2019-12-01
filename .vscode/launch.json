@@ -2,6 +2,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - PriorityQueue",
+            "request": "launch",
+            "mainClass": "model.PriorityQueue",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - BinaryHeap",
+            "request": "launch",
+            "mainClass": "temp.BinaryHeap",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - priority_queue",
             "request": "launch",
             "mainClass": "model.priority_queue",

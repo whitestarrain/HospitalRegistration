@@ -18,12 +18,13 @@ public class Structure {
     private HashMap<String, Patient> patients;
     private ArrayList<Doctor> doctors;
     private ArrayList<Records> recoders;
-    private priority_queue queue;// 排队病人
+    private PriorityQueue priorityQueue;
+    private WaitPatients waitPatients;
 
     public Structure() {
-        queue = new priority_queue();
         diseases = new diseasesTree();
-
+        waitPatients = new WaitPatients();
+        priorityQueue = new PriorityQueue();
         // 其他数据通过HashmMap就行了，不需要重新写新类
         try {
             ObjectInputStream in = null;
@@ -77,22 +78,6 @@ public class Structure {
 
     public DiseaseType searchDiseasesType(String s) {
         return diseases.getDisease(s);
-    }
-
-    public ArrayList<Patient> getNoProQueue() {// 得到未经排序的病人队列
-        return queue.getqueue();
-    }
-
-    public int getqueuelength() {// 获得总排队病人数量
-        return queue.length;
-    }
-
-    public ArrayList<Integer> getIsReview() {// 获得是否为复诊的队列
-        return queue.getIsReview();
-    }
-
-    public void SetToPriorityQueue() {
-        queue.SetToPriorityQueue();
     }
 
     public DefaultMutableTreeNode addSubDis(DefaultMutableTreeNode par, String s) {// 返回子病对应节点
@@ -162,9 +147,9 @@ public class Structure {
             int j = 0;
             int n = 0;
 
-            //进行冒泡排序
+            // 进行冒泡排序
             while (i + n * gap < arr.size()) {
-                j=i+gap;
+                j = i + gap;
                 while (j < arr.size() && ((patients.get(arr.get(j)).getName())
                         .compareTo((patients.get(arr.get(i + n * gap)).getName()))) < 0) {
                     temp = arr.get(i + n * gap);
@@ -200,11 +185,20 @@ public class Structure {
         return j;
     }
 
-   public ArrayList<String> getqueue(){
-       ArrayList<String> a=new ArrayList();
-       for(Patient p:queue.getqueue()){
-            a.add(p.getName()+":"+p.getID());
-       }
-       return a;
-   }
+    public int getWaitPatientsSize() {
+        return waitPatients.getsize();
+    }
+
+    public void addWaitPatients(Patient p, int a, int b) {
+        priorityQueue.insert(p, a, b);
+    }
+    public String getWaitPatientsIndexOf(int i){
+        return waitPatients.getIndexOf(i).toString();
+    }
+    public void addWaitPatientstoQueue(int i,int a,int b){
+        priorityQueue.insert(waitPatients.getIndexOf(i), a, b);
+    }
+    public ArrayList<String> getWaitPaitent_Priority(){
+        return priorityQueue.getPriorityQueue();
+    }
 }

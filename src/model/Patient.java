@@ -21,7 +21,7 @@ class Patient implements Serializable{// 病人
     }
 
     public String toString() {
-        return "病人 " + ID + " : " + name;
+        return ID + " : " + name;
     }
 
     public int hashCode() {

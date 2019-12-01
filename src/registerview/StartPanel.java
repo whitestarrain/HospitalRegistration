@@ -68,10 +68,12 @@ public class StartPanel extends JPanel {
                 MainViewFrame.getStartPanel().setEnabled(false);
                 MainViewFrame.getTreatment().setVisible(true);
                 MainViewFrame.getTreatment().setEnabled(true);
+                //TODO 诊断界面要显示优先权队列，这里删了那个函数，之后补上
 
-              for(String s:MainViewFrame.gController().getQueue()){//初始化队列列表
-                    MainViewFrame.getTreatment().addQueueListItem(s);
-              }
+                ArrayList<String> s=MainViewFrame.gController().getWaitPaitent_Priority();
+                for(String str:s){
+                    MainViewFrame.getTreatment().addQueueListItem(str);
+                }
             }
         });
     }

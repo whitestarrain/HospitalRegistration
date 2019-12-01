@@ -15,7 +15,7 @@ public class TriagePanel extends JPanel implements ActionListener {
     private MainView mainView;
     private JButton begin;
     private JButton back;
-    public boolean hasReview=false;
+    public boolean hasReview = false;
     TriagePanel triagePanel = this;
 
     public TriagePanel(MainView MainViewFrame) {
@@ -38,23 +38,24 @@ public class TriagePanel extends JPanel implements ActionListener {
     private void setEvent() {
         begin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(hasReview==true){
-                    JOptionPane.showMessageDialog(mainView, "已设置完毕，请返回","",0);
+                if (hasReview == true) {
+                    JOptionPane.showMessageDialog(mainView, "已设置完毕，请返回", "", 0);
                     return;
                 }
                 int i = 0;
                 // System.out.println(mainView.gController().gStructure().getqueue());
                 // FIXMENOTE ?成员对象的方法以及变量无法调用，在这里加.size错误,因为无法导入priority_queue包，该包不可见
 
-                while (i < mainView.gController().gStructure().getqueuelength()) {
+                while (i < mainView.gController().getWaitPatientsLength()) {
                     int a = JOptionPane.showConfirmDialog(triagePanel,
-                            "请问 " + mainView.gController().gStructure().getNoProQueue().get(i) + " 是否为复诊", "请选择", 0);
-                    mainView.gController().gStructure().getIsReview().add(a);// 将选择标识加入到数组中
+                            "请问 " + mainView.gController().getTheIndexOfPatients(i) + " 是否为复诊", "请选择", 0);
+                    int b = JOptionPane.showConfirmDialog(triagePanel,
+                            "请问 " + mainView.gController().getTheIndexOfPatients(i) + " 是否为加急病人", "请选择", 0);
+                    mainView.gController().addWaitPatientsToQueue(i, a, b);;// 将选择标识加入到数组中
                     i++;
-                    //是为0，否为1
+                    // 是为0，否为1
                 }
-                mainView.gController().gStructure().SetToPriorityQueue();
-                hasReview=true;
+                hasReview = true;
             }
         });
         back.addActionListener(this);

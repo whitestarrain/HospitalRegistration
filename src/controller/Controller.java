@@ -51,8 +51,20 @@ public class Controller {
         return structure.getDoctorComboBox();
     }
 
-    public ArrayList<String> getQueue() {
-        return structure.getqueue();
+    public int getWaitPatientsLength() {
+        return structure.getWaitPatientsSize();
+    }
+
+    public String getTheIndexOfPatients(int i) {
+        return structure.getWaitPatientsIndexOf(i);
+    }
+
+    public void addWaitPatientsToQueue(int i, int a, int b) {
+        structure.addWaitPatientstoQueue(i, a, b);
+    }
+
+    public ArrayList<String> getWaitPaitent_Priority() {
+        return structure.getWaitPaitent_Priority();
     }
 
     // public void initData(Structure structure,MainView view){//将view中的数据初始化
