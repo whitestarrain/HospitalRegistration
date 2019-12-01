@@ -5,7 +5,8 @@ import javax.swing.JFrame;
 import controller.Controller;
 
 public class MainView extends JFrame {
-    private StartPanel startPanel;//面板加入不设置bounds的话会无法加载
+    private static final long serialVersionUID = -7387700552820039942L;
+    private StartPanel startPanel;// 面板加入不设置bounds的话会无法加载
     private Administrator administrator;
     private TriagePanel triageJPanel;
     private Treatment treatment;

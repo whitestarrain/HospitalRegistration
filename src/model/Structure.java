@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -173,15 +174,6 @@ public class Structure {
                 }
                 n++;
             }
-            // while (j < arr.size()
-            // &&
-            // ((patients.get(arr.get(j)).getName()).compareTo((patients.get(arr.get(i)).getName())))
-            // < 0) {
-            // temp = arr.get(i);
-            // arr.set(i, arr.get(j));
-            // arr.set(j, temp);
-            // j += gap;
-            // }
         }
     }
 
@@ -208,7 +200,11 @@ public class Structure {
         return j;
     }
 
-    public static void main(String[] args) {
-        System.out.println("病人5".compareTo("病人14"));
-    }
+   public ArrayList<String> getqueue(){
+       ArrayList<String> a=new ArrayList();
+       for(Patient p:queue.getqueue()){
+            a.add(p.getName()+":"+p.getID());
+       }
+       return a;
+   }
 }

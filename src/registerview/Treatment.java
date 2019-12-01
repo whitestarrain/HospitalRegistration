@@ -9,6 +9,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -22,7 +23,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.ListModel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -32,6 +35,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 public class Treatment extends JPanel {
+	private static final long serialVersionUID = 8864550146329822717L;
 	private MainView mainView;
 	private JTextArea textArea_1;
 	private JLabel label, label_1;
@@ -47,7 +51,8 @@ public class Treatment extends JPanel {
 	private JScrollPane scrollPane_3;
 	private JScrollPane scrollPane_4;
 	private JScrollPane scrollPane_5;
-	private JList list;
+	private JList<String> list;
+	private DefaultListModel lm;
 	private JScrollPane scrollPane_2;
 	private JLabel label_7;
 	private JTextArea textArea_2;
@@ -244,7 +249,11 @@ public class Treatment extends JPanel {
 		textArea_2 = new JTextArea();
 		scrollPane_2.setViewportView(textArea_2);
 
-		list = new JList();
+		lm=new DefaultListModel<String>();
+		list=new JList<String>(lm);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.enableInputMethods(false);
+		list.setSelectedIndex(0);
 		scrollPane_5.setViewportView(list);
 
 		JLabel label_6 = new JLabel("\u75C5\u4EBA\u961F\u5217");
@@ -269,7 +278,10 @@ public class Treatment extends JPanel {
 		this.setVisible(false);
 		this.setEnabled(false);
 	}
-
+	public void addQueueListItem(String s){
+		lm.addElement(s);
+	}
+	
 	private void Event() {
 		button_1.addActionListener(new ActionListener() {
 

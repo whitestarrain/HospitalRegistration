@@ -3,12 +3,14 @@ package registerview;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class StartPanel extends JPanel {
+    private static final long serialVersionUID = 5955317136594549001L;
     private MainView MainViewFrame;
     private JButton administrator;
     private JButton triage;
@@ -66,6 +68,10 @@ public class StartPanel extends JPanel {
                 MainViewFrame.getStartPanel().setEnabled(false);
                 MainViewFrame.getTreatment().setVisible(true);
                 MainViewFrame.getTreatment().setEnabled(true);
+
+              for(String s:MainViewFrame.gController().getQueue()){//初始化队列列表
+                    MainViewFrame.getTreatment().addQueueListItem(s);
+              }
             }
         });
     }

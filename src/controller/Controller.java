@@ -1,6 +1,9 @@
 package controller;
 
+import java.util.ArrayList;
+
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Structure;
@@ -34,17 +37,23 @@ public class Controller {
     public String getRecoders(String PatientID) {
         return structure.getRecoder(PatientID);
     }
-    public String patientToString(DefaultMutableTreeNode dis, String Id_or_Name){
-        
+
+    public String patientToString(DefaultMutableTreeNode dis, String Id_or_Name) {
+
         return structure.allPatientToString(dis, Id_or_Name);
     }
-    public JComboBox getMedicineComboBox(){
+
+    public JComboBox getMedicineComboBox() {
         return structure.getMedicineComboBox();
     }
-    public JComboBox getDoctorComboBox(){
+
+    public JComboBox getDoctorComboBox() {
         return structure.getDoctorComboBox();
     }
 
+    public ArrayList<String> getQueue() {
+        return structure.getqueue();
+    }
 
     // public void initData(Structure structure,MainView view){//将view中的数据初始化
     // initAdministatorData(structure, view);

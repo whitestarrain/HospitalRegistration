@@ -28,6 +28,9 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 public class Administrator extends JPanel {
+
+	private static final long serialVersionUID = 7029198858336373726L;
+
 	private MainView mainView;
 	private JTextField textField;
 	private JScrollPane scrollPane;
@@ -65,13 +68,13 @@ public class Administrator extends JPanel {
 		textArea = new JTextArea();
 		scrollPane.setBorder(new LineBorder(Color.gray, 2, true));
 		button_1 = new JButton("查询病人");
-		
+
 		button_2 = new JButton("查询病种");
-		
+
 		textField = new JTextField("请输入病类");
-		
+
 		label = new JLabel("\u53F3\u952E\u8FDB\u884C\u4FEE\u6539\u6216\u8005\u67E5\u8BE2");
-		
+
 		button = new JButton("\u8FD4\u56DE");// 返回
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setViewportBorder(new LineBorder(Color.gray, 1, true));
@@ -79,7 +82,7 @@ public class Administrator extends JPanel {
 		treeModel = new DefaultTreeModel(mainView.gController().gStructure().getJTreeroot());
 		tree = new JTree(treeModel);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// 设置仅单选
-		
+
 		// 初始化右键菜单
 		jp.add(inquire);
 		jp.add(delete);
@@ -173,9 +176,9 @@ public class Administrator extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 未修改文件
-				DefaultMutableTreeNode temp=(DefaultMutableTreeNode) nowPath.getLastPathComponent();
-				treeModel.removeNodeFromParent(temp);//从树中删除
-				mainView.gController().deleNode(temp);//从文件中删除
+				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) nowPath.getLastPathComponent();
+				treeModel.removeNodeFromParent(temp);// 从树中删除
+				mainView.gController().deleNode(temp);// 从文件中删除
 			}
 		});
 		additem.addActionListener(new ActionListener() {// 添加选项

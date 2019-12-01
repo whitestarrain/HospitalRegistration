@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - priority_queue",
+            "request": "launch",
+            "mainClass": "model.priority_queue",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Structure",
             "request": "launch",
             "mainClass": "model.Structure",
