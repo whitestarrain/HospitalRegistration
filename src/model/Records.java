@@ -36,7 +36,7 @@ class Records implements Serializable {
     }
 
     public String toString() {
-        return patientID + ":" + time + medicines;
+        return patientID + ":" + time +":"+doctorID+":"+ medicines;
     }
 
     public int hashCode() {

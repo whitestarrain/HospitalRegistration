@@ -46,13 +46,11 @@ class priority_queue {// 优先权队列构建
             }
         }
         int gap = (int) Math.floor((double) tempNotReviewed.size() / tempHasReviewed.size());// 获得均匀插入的间隔，最小为1
-        for (int i = 0, it = 0; i < tempNotReviewed.size(); it++) {
-            for (int j = 0; j < gap; j++) {
-                temp.add(tempNotReviewed.get(i));
-                i++;
-                j++;
+        for (int i = 0,nj=0; i < tempHasReviewed.size(); i++,nj++) {
+            for(int j=0;j<gap&&nj<tempNotReviewed.size();j++){
+                temp.add(tempNotReviewed.get(nj));
             }
-            temp.add(tempHasReviewed.get(it));
+            temp.add(tempHasReviewed.get(i));
         }
         ispriority = true;
         queue = temp;

@@ -1,5 +1,6 @@
 package registerview;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -18,6 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.LineBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -60,24 +62,24 @@ public class Administrator extends JPanel {
 		this.setSize(600, 500);
 
 		scrollPane = new JScrollPane();
-
 		textArea = new JTextArea();
-
+		scrollPane.setBorder(new LineBorder(Color.gray, 2, true));
 		button_1 = new JButton("查询病人");
-
+		
 		button_2 = new JButton("查询病种");
-
+		
 		textField = new JTextField("请输入病类");
-
+		
 		label = new JLabel("\u53F3\u952E\u8FDB\u884C\u4FEE\u6539\u6216\u8005\u67E5\u8BE2");
-
+		
 		button = new JButton("\u8FD4\u56DE");// 返回
 		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setViewportBorder(new LineBorder(Color.gray, 1, true));
 
 		treeModel = new DefaultTreeModel(mainView.gController().gStructure().getJTreeroot());
 		tree = new JTree(treeModel);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// 设置仅单选
-
+		
 		// 初始化右键菜单
 		jp.add(inquire);
 		jp.add(delete);

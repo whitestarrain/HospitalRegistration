@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Structure",
+            "request": "launch",
+            "mainClass": "model.Structure",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - temp2",
             "request": "launch",
             "mainClass": "temp.temp2",

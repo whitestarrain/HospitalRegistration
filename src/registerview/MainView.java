@@ -26,7 +26,7 @@ public class MainView extends JFrame {
         triageJPanel = new TriagePanel(mainView);
         treatment =new Treatment(mainView);
 
-        setBounds(500, 200, 600, 500);
+        setBounds(500, 200, 600, 550);
         add(startPanel);
         add(administrator);
         add(triageJPanel);

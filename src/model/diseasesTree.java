@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JTextArea;
@@ -16,6 +17,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
     private DefaultMutableTreeNode jRoot;
     private int number = 0;// 嗯，，，优化了添加算法似乎不需要这个了
     private boolean hasModify = false;
+    private ArrayList<String> AllPatient=null;//用来临时保存某病种的所有病人ID
 
     public diseasesTree() {// 从默认序列文件中读取数据初始化对象
         ObjectInputStream in = null;
@@ -111,7 +113,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         return jRoot;
     }
 
-    public DiseaseType getDisease(String s) {// 查找病类
+    public DiseaseType getDisease(String s) {// 根据病名称查找病类
         if (whichToSearch != null && s != whichToSearch.name) {// 当再次查找时如果是同一个，则按步骤查找，否则还原whichtosearch为null
             whichToSearch = null;
         }
@@ -153,7 +155,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         return temp;
     }
 
-    public boolean hasModify() {// 返回是否修改树
+    public boolean hasModify() {// 返回是否修改过树
         return hasModify;
     }
 
@@ -176,7 +178,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         return getDiseaseByID(root, ID);
     }
 
-    public DiseaseType getDiseaseByID(DiseaseType t, String s) {// 根据ID查找，比根据name查找的那个算法要优化些
+    public DiseaseType getDiseaseByID(DiseaseType t, String s) {// 根据ID查找，比根据name查找的那个算法要优化些，不需要变量，但更费事件
         if (t.getID().equals(s)) {
             return t;
         }
@@ -192,7 +194,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         return null;
     }
 
-    public void deleteNode(DiseaseType dele) {// 文件系统中删除，需要移除父病种对其引用，移除HashMap中的元素
+    public void deleteNode(DiseaseType dele) {// 文件系统中删除，需要移除父病种对其引用
         if (dele.subDiseaseTypes != null) {// 当为病种文件夹时，先删除子病，再删除该病
 
             Iterator<DiseaseType> it = dele.subDiseaseTypes.iterator();
@@ -207,5 +209,24 @@ class diseasesTree {// 病种树类，使用HashMap存储
         DiseaseType parDiseaseType = getDiseaseByID(dele.getParID());
         parDiseaseType.removeSubDis(dele);// 移除父病种对其引用
         hasModify = true;
+    }
+    private void getAllPatient(DiseaseType t){
+        if (t.patient != null) {
+           for(String s:t.patient){
+               AllPatient.add(s);
+           }
+        }
+
+        if (t.subDiseaseTypes != null) {
+            // System.out.println(t.name);
+            for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
+                getAllPatient(tempDiseaseType);
+            }
+        }
+    }
+    public ArrayList<String> GetAllPatient(DiseaseType t){
+        AllPatient=new ArrayList<String>();
+        getAllPatient(t);
+        return AllPatient;
     }
 }

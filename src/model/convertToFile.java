@@ -40,12 +40,12 @@ public class convertToFile {
         }
         System.out.println(patient);
 
-        HashMap<String, Doctor> doctors = new HashMap<String, Doctor>();
+        ArrayList<Doctor>  doctors =new ArrayList<Doctor>();
         try {
             bufread = new BufferedReader(new FileReader("source/doctor.txt"));
             while ((s = bufread.readLine()) != null) {
                 arrtemp = s.split(" ");
-                doctors.put(arrtemp[0], new Doctor(arrtemp[0], arrtemp[1]));
+                doctors.add(new Doctor(arrtemp[0], arrtemp[1]));
             }
         } catch (IOException e) {
             System.out.println("输入流打开失败");
@@ -59,12 +59,12 @@ public class convertToFile {
         }
         System.out.println(doctors);
 
-        HashMap<String, Medicine> medicines = new HashMap<String, Medicine>();
+        ArrayList<Medicine> medicines = new ArrayList<Medicine>();
         try {
             bufread = new BufferedReader(new FileReader("source/medicine.txt"));
             while ((s = bufread.readLine()) != null) {
                 arrtemp = s.split(" ");
-                medicines.put(arrtemp[0], new Medicine(arrtemp[0], arrtemp[1], Integer.valueOf(arrtemp[2]),
+                medicines.add( new Medicine(arrtemp[0], arrtemp[1], Integer.valueOf(arrtemp[2]),
                         Float.valueOf(arrtemp[3]), arrtemp[4]));
             }
         } catch (IOException e) {
@@ -150,15 +150,16 @@ public class convertToFile {
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/patients.HashMap"));
             out.writeObject(patient);
             out.close();
-            out = new ObjectOutputStream(new FileOutputStream("objectfiles/medicines.HashMap"));
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/medicines.ArrayList"));
             out.writeObject(medicines);
             out.close();
-            out = new ObjectOutputStream(new FileOutputStream("objectfiles/doctors.HashMap"));
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/doctors.ArrayList"));
             out.writeObject(doctors);
             out.close();
-            out = new ObjectOutputStream(new FileOutputStream("objectfiles/diseases.HashMap"));
-            out.writeObject(alldisease);
-            out.close();
+            //有root就够了，不需要这个HashMap实例化
+            // out = new ObjectOutputStream(new FileOutputStream("objectfiles/diseases.HashMap"));
+            // out.writeObject(alldisease);
+            // out.close();
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/records.ArrayList"));
             out.writeObject(records);
             out.close();

@@ -1,5 +1,6 @@
 package controller;
 
+import javax.swing.JComboBox;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Structure;
@@ -18,12 +19,32 @@ public class Controller {
         return structure.hasTreeMoidfy();
     }
 
-    public DefaultMutableTreeNode addSubDis(DefaultMutableTreeNode par, String s) {//添加节点方法
+    public DefaultMutableTreeNode addSubDis(DefaultMutableTreeNode par, String s) {// 添加节点方法
         return structure.addSubDis(par, s);
     }
-    public void deleNode(DefaultMutableTreeNode a){//删除节点方法
+
+    public void deleNode(DefaultMutableTreeNode a) {// 删除节点方法
         structure.deleNode(a);
     }
+
+    public DefaultMutableTreeNode getJTreeRoot() {
+        return structure.getJTreeroot();
+    }
+
+    public String getRecoders(String PatientID) {
+        return structure.getRecoder(PatientID);
+    }
+    public String patientToString(DefaultMutableTreeNode dis, String Id_or_Name){
+        
+        return structure.allPatientToString(dis, Id_or_Name);
+    }
+    public JComboBox getMedicineComboBox(){
+        return structure.getMedicineComboBox();
+    }
+    public JComboBox getDoctorComboBox(){
+        return structure.getDoctorComboBox();
+    }
+
 
     // public void initData(Structure structure,MainView view){//将view中的数据初始化
     // initAdministatorData(structure, view);

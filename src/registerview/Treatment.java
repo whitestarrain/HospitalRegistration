@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -11,13 +15,20 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 public class Treatment extends JPanel {
@@ -26,6 +37,7 @@ public class Treatment extends JPanel {
 	private JLabel label, label_1;
 	private JScrollPane scrollPane;
 	private JTree tree;
+	private TreeModel treeModel;
 	private JButton btnNewButton;
 	private JButton button_1;
 	private JTextField textField;
@@ -41,9 +53,16 @@ public class Treatment extends JPanel {
 	private JTextArea textArea_2;
 	private JComboBox<String> doctorBox;
 	private JComboBox<String> medicineBox;
-
+	private String disease;
+	private boolean textAreaHasSelected = false;
+	private JPopupMenu jm = null;
+	private JMenuItem idSort = null;
+	private JMenuItem nameSort = null;
+	private DefaultMutableTreeNode selectedNode=null;//记录被选中的节点，默认为root
 	public Treatment() {
-
+		disease = null;
+		init();
+		Event();
 	}
 
 	public Treatment(MainView mainView) {
@@ -54,7 +73,13 @@ public class Treatment extends JPanel {
 	}
 
 	private void init() {
+		jm = new JPopupMenu();
+		idSort = new JMenuItem("ID");
+		nameSort = new JMenuItem("姓名");
+		jm.add(idSort);
+		jm.add(nameSort);
 
+		selectedNode=mainView.gController().getJTreeRoot();
 		JScrollPane scrollPane = new JScrollPane();
 
 		label_1 = new JLabel("\u8BF7\u8BCA\u65AD\uFF1A");// 请诊断
@@ -63,8 +88,9 @@ public class Treatment extends JPanel {
 		label_1.setFont(new Font("宋体", Font.PLAIN, 16));
 
 		textArea_1 = new JTextArea();
-		textArea_1.setText("\u533B\u751F\u8BCA\u65AD");// 医生诊断
+		textArea_1.setText("请医生输入详细诊断");// 医生诊断
 		textArea_1.setBackground(Color.WHITE);
+		textArea_1.setLineWrap(true);
 
 		btnNewButton = new JButton("确认");
 
@@ -73,10 +99,11 @@ public class Treatment extends JPanel {
 
 		textField = new JTextField();
 		textField.setColumns(10);
+		textField.setEditable(false);
 
-		doctorBox = new JComboBox();
+		doctorBox = mainView.gController().getDoctorComboBox();
 
-		medicineBox = new JComboBox();
+		medicineBox = mainView.gController().getMedicineComboBox();
 
 		JLabel label_2 = new JLabel("\u00D7");
 
@@ -233,9 +260,8 @@ public class Treatment extends JPanel {
 		label.setForeground(Color.BLACK);
 		label.setFont(new Font("宋体", Font.PLAIN, 17));
 
-		tree = new JTree();
-		tree.setBackground(Color.WHITE);
-		tree.setFont(new Font("宋体", Font.PLAIN, 15));
+		treeModel = new DefaultTreeModel(mainView.gController().getJTreeRoot());
+		tree = new JTree(treeModel);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// 设置仅单选
 		scrollPane.setViewportView(tree);
 		setLayout(groupLayout);
@@ -253,6 +279,53 @@ public class Treatment extends JPanel {
 				mainView.getStartPanel().setEnabled(true);
 				mainView.getTreatment().setVisible(false);
 				mainView.getTreatment().setEnabled(false);
+			}
+		});
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+
+			@Override
+			public void valueChanged(TreeSelectionEvent e) {
+				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+				selectedNode=temp;//记录被选中的节点
+				textField.setText((disease = temp.toString()));
+				textArea_2.setText(mainView.gController().patientToString(temp, ""));// 默认无序
+			}
+		});
+		textArea_1.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				// 无动作
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (textAreaHasSelected == false) {
+					textArea_1.setText("");
+					textArea_1.revalidate();
+					textAreaHasSelected = true;
+				}
+			}
+		});
+		textArea_2.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					jm.show(e.getComponent(), e.getX(), e.getY());
+				}
+			}
+		});
+		idSort.addActionListener(new ActionListener(){
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				textArea_2.setText(mainView.gController().patientToString(selectedNode, "Id"));
+			}
+		});
+		nameSort.addActionListener(new ActionListener(){
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				textArea_2.setText(mainView.gController().patientToString(selectedNode, "Name"));
 			}
 		});
 	}
