@@ -2,6 +2,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - tes",
+            "request": "launch",
+            "mainClass": "temp.tes",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - temp1",
+            "request": "launch",
+            "mainClass": "temp.temp1",
+            "projectName": "HospitalRegistration"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - PriorityQueue",
             "request": "launch",
             "mainClass": "model.PriorityQueue",

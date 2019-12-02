@@ -31,4 +31,10 @@ class Medicine implements Serializable {
     public int hashCode() {
         return Integer.valueOf(ID);
     }
+    public String getName(){
+        return name;
+    }
+    public String getID(){
+        return ID;
+    }
 }

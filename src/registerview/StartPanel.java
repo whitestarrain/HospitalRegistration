@@ -71,9 +71,11 @@ public class StartPanel extends JPanel {
                 //TODO 诊断界面要显示优先权队列，这里删了那个函数，之后补上
 
                 ArrayList<String> s=MainViewFrame.gController().getWaitPaitent_Priority();
+                MainViewFrame.getTreatment().removeAllListItem();
                 for(String str:s){
                     MainViewFrame.getTreatment().addQueueListItem(str);
                 }
+                MainViewFrame.getTreatment().setSelectedItem();
             }
         });
     }

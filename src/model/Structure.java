@@ -14,18 +14,15 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 public class Structure {
     private diseasesTree diseases;// 只在更新文件时用了下，其他时候没动过
-    private ArrayList<Medicine> medicines;
+    private static ArrayList<Medicine> medicines;// 在创建第一个类成员时初始化
+    private static ArrayList<Doctor> doctors;
+    private static ArrayList<Records> recoders;
     private HashMap<String, Patient> patients;
-    private ArrayList<Doctor> doctors;
-    private ArrayList<Records> recoders;
     private PriorityQueue priorityQueue;
     private WaitPatients waitPatients;
+    private HashRecords<String, Records> hashrecords;
 
-    public Structure() {
-        diseases = new diseasesTree();
-        waitPatients = new WaitPatients();
-        priorityQueue = new PriorityQueue();
-        // 其他数据通过HashmMap就行了，不需要重新写新类
+    static {
         try {
             ObjectInputStream in = null;
             in = new ObjectInputStream(new FileInputStream("objectfiles/doctors.ArrayList"));
@@ -34,11 +31,27 @@ public class Structure {
             in = new ObjectInputStream(new FileInputStream("objectfiles/medicines.ArrayList"));
             medicines = (ArrayList<Medicine>) in.readObject();
             in.close();
-            in = new ObjectInputStream(new FileInputStream("objectfiles/patients.HashMap"));
-            patients = (HashMap<String, Patient>) in.readObject();
-            in.close();
             in = new ObjectInputStream(new FileInputStream("objectfiles/records.ArrayList"));
             recoders = (ArrayList<Records>) in.readObject();
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("structure中静态成员从序列化文件中初始化失败");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Structure() {
+        hashrecords = new HashRecords<String, Records>();
+        diseases = new diseasesTree();
+        waitPatients = new WaitPatients();
+        priorityQueue = new PriorityQueue();
+        // 其他数据通过HashmMap就行了，不需要重新写新类
+        try {
+            ObjectInputStream in = null;
+            in = new ObjectInputStream(new FileInputStream("objectfiles/patients.HashMap"));
+            patients = (HashMap<String, Patient>) in.readObject();
             in.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,6 +59,27 @@ public class Structure {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        for (Records r : recoders) {
+            hashrecords.put(r.getPatientID(), r);
+        }
+    }
+
+    public static String getDoctorName(String ID) {
+        for (Doctor d : doctors) {
+            if (d.getID().equals(ID)) {
+                return d.getName();
+            }
+        }
+        return "未知";
+    }
+
+    public static String getMdedicineName(String ID) {
+        for (Medicine d : medicines) {
+            if (d.getID().equals(ID)) {
+                return d.getName();
+            }
+        }
+        return "未知";
     }
 
     public DefaultMutableTreeNode getJTreeroot() {
@@ -192,13 +226,16 @@ public class Structure {
     public void addWaitPatients(Patient p, int a, int b) {
         priorityQueue.insert(p, a, b);
     }
-    public String getWaitPatientsIndexOf(int i){
+
+    public String getWaitPatientsIndexOf(int i) {
         return waitPatients.getIndexOf(i).toString();
     }
-    public void addWaitPatientstoQueue(int i,int a,int b){
+
+    public void addWaitPatientstoQueue(int i, int a, int b) {
         priorityQueue.insert(waitPatients.getIndexOf(i), a, b);
     }
-    public ArrayList<String> getWaitPaitent_Priority(){
+
+    public ArrayList<String> getWaitPaitent_Priority() {
         return priorityQueue.getPriorityQueue();
     }
 }

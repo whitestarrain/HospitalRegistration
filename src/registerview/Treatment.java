@@ -41,7 +41,7 @@ public class Treatment extends JPanel {
 	private JLabel label, label_1;
 	private JScrollPane scrollPane;
 	private JTree tree;
-	private TreeModel treeModel;
+	private DefaultTreeModel treeModel;
 	private JButton btnNewButton;
 	private JButton button_1;
 	private JTextField textField;
@@ -251,9 +251,10 @@ public class Treatment extends JPanel {
 
 		lm=new DefaultListModel<String>();
 		list=new JList<String>(lm);
+		list.setEnabled(false);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.enableInputMethods(false);
-		list.setSelectedIndex(0);
+		list.setFont(new Font("宋体", Font.PLAIN, 13));
 		scrollPane_5.setViewportView(list);
 
 		JLabel label_6 = new JLabel("\u75C5\u4EBA\u961F\u5217");
@@ -278,8 +279,18 @@ public class Treatment extends JPanel {
 		this.setVisible(false);
 		this.setEnabled(false);
 	}
+
+	public void treeReload(){
+		treeModel.reload();
+	}
+	public void removeAllListItem(){
+		lm.removeAllElements();
+	}
 	public void addQueueListItem(String s){
 		lm.addElement(s);
+	}
+	public void setSelectedItem(){
+		list.setSelectedIndex(0);
 	}
 	
 	private void Event() {
@@ -294,7 +305,6 @@ public class Treatment extends JPanel {
 			}
 		});
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
-
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();

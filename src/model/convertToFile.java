@@ -131,7 +131,7 @@ public class convertToFile {
             bufread = new BufferedReader(new FileReader("source/records.txt"));
             while ((s = bufread.readLine()) != null) {
                 arrtemp = s.split(" ");
-                records.add(new Records(arrtemp[0], arrtemp[1], arrtemp[2], arrtemp[3]));
+                records.add(new Records(arrtemp[0], arrtemp[1], arrtemp[2], arrtemp[3],arrtemp[4]));
             }
         } catch (IOException e) {
             System.out.println("输入流打开失败");
