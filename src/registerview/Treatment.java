@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -37,7 +38,7 @@ import javax.swing.tree.TreeSelectionModel;
 public class Treatment extends JPanel {
 	private static final long serialVersionUID = 8864550146329822717L;
 	private MainView mainView;
-	private JTextArea textArea_1;
+	private JTextArea textArea, textArea_1;
 	private JLabel label, label_1;
 	private JScrollPane scrollPane;
 	private JTree tree;
@@ -51,19 +52,20 @@ public class Treatment extends JPanel {
 	private JScrollPane scrollPane_3;
 	private JScrollPane scrollPane_4;
 	private JScrollPane scrollPane_5;
-	private JList<String> list;
+	private JList<Object> list;
 	private DefaultListModel lm;
 	private JScrollPane scrollPane_2;
 	private JLabel label_7;
 	private JTextArea textArea_2;
-	private JComboBox<String> doctorBox;
-	private JComboBox<String> medicineBox;
+	private JComboBox<Object> doctorBox;
+	private JComboBox<Object> medicineBox;
 	private String disease;
 	private boolean textAreaHasSelected = false;
 	private JPopupMenu jm = null;
 	private JMenuItem idSort = null;
 	private JMenuItem nameSort = null;
-	private DefaultMutableTreeNode selectedNode=null;//记录被选中的节点，默认为root
+	private DefaultMutableTreeNode selectedNode = null;// 记录被选中的节点，默认为root
+
 	public Treatment() {
 		disease = null;
 		init();
@@ -84,7 +86,7 @@ public class Treatment extends JPanel {
 		jm.add(idSort);
 		jm.add(nameSort);
 
-		selectedNode=mainView.gController().getJTreeRoot();
+		selectedNode = mainView.gController().getJTreeRoot();
 		JScrollPane scrollPane = new JScrollPane();
 
 		label_1 = new JLabel("\u8BF7\u8BCA\u65AD\uFF1A");// 请诊断
@@ -249,8 +251,8 @@ public class Treatment extends JPanel {
 		textArea_2 = new JTextArea();
 		scrollPane_2.setViewportView(textArea_2);
 
-		lm=new DefaultListModel<String>();
-		list=new JList<String>(lm);
+		lm = new DefaultListModel<Object>();
+		list = new JList<Object>(lm);
 		list.setEnabled(false);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.enableInputMethods(false);
@@ -261,7 +263,7 @@ public class Treatment extends JPanel {
 		label_6.setHorizontalAlignment(SwingConstants.CENTER);
 		scrollPane_5.setColumnHeaderView(label_6);
 
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		scrollPane_1.setViewportView(textArea);
 
 		label = new JLabel("\u75C5\u5386");// 病历
@@ -280,19 +282,27 @@ public class Treatment extends JPanel {
 		this.setEnabled(false);
 	}
 
-	public void treeReload(){
+	public void treeReload() {
 		treeModel.reload();
 	}
-	public void removeAllListItem(){
+
+	public void removeAllListItem() {
 		lm.removeAllElements();
 	}
-	public void addQueueListItem(String s){
+
+	public void recordsRemove() {
+		textArea.setText("");
+	}
+
+	public void addQueueListItem(Object s) {
 		lm.addElement(s);
 	}
-	public void setSelectedItem(){
+
+	public void setSelectedItem() {
 		list.setSelectedIndex(0);
+		textArea.setText(mainView.gController().getRecordsToString(list.getSelectedValue()));
 	}
-	
+
 	private void Event() {
 		button_1.addActionListener(new ActionListener() {
 
@@ -308,7 +318,7 @@ public class Treatment extends JPanel {
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-				selectedNode=temp;//记录被选中的节点
+				selectedNode = temp;// 记录被选中的节点
 				textField.setText((disease = temp.toString()));
 				textArea_2.setText(mainView.gController().patientToString(temp, ""));// 默认无序
 			}
@@ -336,18 +346,55 @@ public class Treatment extends JPanel {
 				}
 			}
 		});
-		idSort.addActionListener(new ActionListener(){
-		
+		idSort.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				textArea_2.setText(mainView.gController().patientToString(selectedNode, "Id"));
 			}
 		});
-		nameSort.addActionListener(new ActionListener(){
-		
+		nameSort.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				textArea_2.setText(mainView.gController().patientToString(selectedNode, "Name"));
+			}
+		});
+		btnNewButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (list.isSelectionEmpty()) {
+					JOptionPane.showMessageDialog(mainView, "病人已经诊断完成，请退出", "", 0);
+					return;
+				}
+
+				if (medicineBox.getSelectedIndex() == 0 || doctorBox.getSelectedIndex() == 0
+						|| textField.getText().equals("")) {
+					JOptionPane.showMessageDialog(mainView, "请把选项选择完整", "", 0);
+					return;
+				}
+
+				String memo = textArea_1.getText();// 记录医生诊断
+				Object medicine = medicineBox.getSelectedItem();// 记录所选药品
+				Object doctor = doctorBox.getSelectedItem();// 记录就诊医生
+				Object patient = list.getSelectedValue();
+				DefaultMutableTreeNode dis = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();// 记录所选病种
+				int number = Integer.parseInt(textField_1.getText());
+				if (number > mainView.gController().getMedicineNumber(medicine)) {
+					JOptionPane.showMessageDialog(mainView,
+							"药品数量不足，仅剩" + mainView.gController().getMedicineNumber(medicine), "", 0);
+
+					number = mainView.gController().getMedicineNumber(medicine);
+				}
+
+				mainView.gController().queue_peekmin();// 弹出最小的
+				mainView.getStartPanel().ReloadListAndRecords();// 重新加载list
+
+				textArea_1.setText("请医生输入详细诊断");
+				mainView.gController().flushFile(patient, medicine, doctor, dis, memo, number);
+
 			}
 		});
 	}

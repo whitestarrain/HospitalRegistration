@@ -3,11 +3,12 @@ package model;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.swing.JComboBox;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -201,20 +202,20 @@ public class Structure {
         return allPatientToString(d, Id_or_Name);
     }
 
-    public JComboBox<String> getDoctorComboBox() {
-        JComboBox<String> j = new JComboBox<String>();
+    public JComboBox<Object> getDoctorComboBox() {
+        JComboBox<Object> j = new JComboBox<Object>();
         j.addItem("-请选择-");
         for (Doctor d : doctors) {
-            j.addItem(d.getName());
+            j.addItem(d);
         }
         return j;
     }
 
-    public JComboBox<String> getMedicineComboBox() {
-        JComboBox<String> j = new JComboBox<String>();
+    public JComboBox<Object> getMedicineComboBox() {
+        JComboBox<Object> j = new JComboBox<Object>();
         j.addItem("-请选择-");
         for (Medicine m : medicines) {
-            j.addItem(m.toString());
+            j.addItem(m);
         }
         return j;
     }
@@ -235,7 +236,43 @@ public class Structure {
         priorityQueue.insert(waitPatients.getIndexOf(i), a, b);
     }
 
-    public ArrayList<String> getWaitPaitent_Priority() {
+    public ArrayList<Object> getWaitPaitent_Priority() {
         return priorityQueue.getPriorityQueue();
+    }
+
+    public String getRecordsToStringByPatient(Object pat) {
+        return hashrecords.getRecordsToString(((Patient) pat).getID());
+    }
+
+    public void queue_peekmin() {
+        priorityQueue.peekMin();
+    }
+
+    public int getMedicineNumber(Object medicine){
+        return ((Medicine)medicine).number;
+    }
+    private void flushAlls(Object patient, Object medicine, Object doctor, DefaultMutableTreeNode dis, String memo,
+            int number) {
+
+        Date a = new Date();
+        SimpleDateFormat s = new SimpleDateFormat("yyyyMMdd");
+        String time = s.format(a);
+
+        Records r = new Records(((Patient) patient).getID(), time, ((Doctor) doctor).getID(),
+                ((Medicine) medicine).getID());
+
+        recoders.add(r);
+
+        DiseaseType temp=(DiseaseType)(dis.getUserObject());
+        temp.addpatient(((Patient)patient).getID());
+
+        ((Medicine)medicine).number-=number;
+    }
+
+    public void flushAllFile(Object patient, Object medicine, Object doctor, DefaultMutableTreeNode dis, String memo,
+    int number){
+        flushAlls(patient, medicine, doctor, dis, memo, number);
+
+        //TODO更新文件
     }
 }

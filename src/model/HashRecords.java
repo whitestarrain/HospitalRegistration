@@ -119,7 +119,7 @@ class HashRecords<K, V> {
         return h & (size - 1);
     }
 
-    public String getRecords(K akey) {
+    public String getRecordsToString(K akey) {
         StringBuilder bd = new StringBuilder();
         Node<K, V> temp=null;
         int index = indexFor(hash(akey), size);

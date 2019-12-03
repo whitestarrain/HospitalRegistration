@@ -61,22 +61,33 @@ public class StartPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (MainViewFrame.getTriPanel().hasReview == false) {
-                    JOptionPane.showMessageDialog(MainViewFrame, "请进行分诊","",0);
+                    JOptionPane.showMessageDialog(MainViewFrame, "请进行分诊", "", 0);
                     return;
                 }
+
+                ReloadListAndRecords();
+
                 MainViewFrame.getStartPanel().setVisible(false);
                 MainViewFrame.getStartPanel().setEnabled(false);
                 MainViewFrame.getTreatment().setVisible(true);
                 MainViewFrame.getTreatment().setEnabled(true);
-                //TODO 诊断界面要显示优先权队列，这里删了那个函数，之后补上
+                // TODO 诊断界面要显示优先权队列，这里删了那个函数，之后补上
 
-                ArrayList<String> s=MainViewFrame.gController().getWaitPaitent_Priority();
-                MainViewFrame.getTreatment().removeAllListItem();
-                for(String str:s){
-                    MainViewFrame.getTreatment().addQueueListItem(str);
-                }
-                MainViewFrame.getTreatment().setSelectedItem();
             }
         });
+    }
+
+    void ReloadListAndRecords() {// 刷新TreatMentView
+        ArrayList<Object> s = MainViewFrame.gController().getWaitPaitent_Priority();
+        MainViewFrame.getTreatment().removeAllListItem();// 清空等待病人List
+        MainViewFrame.getTreatment().recordsRemove();
+        if (s.isEmpty())// 空的时候直接返回
+            return;
+
+        for (Object str : s) {// 添加等待病人list项
+            MainViewFrame.getTreatment().addQueueListItem(str);
+        }
+
+        MainViewFrame.getTreatment().setSelectedItem();// 选择第一个病人并重置Records
     }
 }

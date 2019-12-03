@@ -34,10 +34,6 @@ public class Controller {
         return structure.getJTreeroot();
     }
 
-    public String getRecoders(String PatientID) {
-        return structure.getRecoder(PatientID);
-    }
-
     public String patientToString(DefaultMutableTreeNode dis, String Id_or_Name) {
 
         return structure.allPatientToString(dis, Id_or_Name);
@@ -51,6 +47,9 @@ public class Controller {
         return structure.getDoctorComboBox();
     }
 
+    public int getMedicineNumber(Object medicine){
+        return structure.getMedicineNumber(medicine);
+    }
     public int getWaitPatientsLength() {
         return structure.getWaitPatientsSize();
     }
@@ -63,8 +62,21 @@ public class Controller {
         structure.addWaitPatientstoQueue(i, a, b);
     }
 
-    public ArrayList<String> getWaitPaitent_Priority() {
+    public ArrayList<Object> getWaitPaitent_Priority() {
         return structure.getWaitPaitent_Priority();
+    }
+
+    public String getRecordsToString(Object pat) {
+        return structure.getRecordsToStringByPatient(pat);
+    }
+
+    public void queue_peekmin() {
+        structure.queue_peekmin();
+    }
+
+    public void flushFile(Object patient, Object medicine, Object doctor, DefaultMutableTreeNode dis, String memo,
+            int number) {
+                structure.flushAllFile(patient, medicine, doctor, dis, memo, number);
     }
 
     // public void initData(Structure structure,MainView view){//将view中的数据初始化

@@ -9,10 +9,10 @@ class PriorityQueue{
     private Node[] array=null;
     public int size;
     private class Node implements Comparable<Node>{
-        private static final int FUZHEN=-5;
+        private static final int FUZHEN=-3;
         private static final int JIAJI=10;
         public Patient p;
-        public int Priority=50;//这里为小堆，权越大，往后排
+        public int Priority=0;//这里为小堆，权越大，往后排
         public Node(Patient p){
             this.p=p;
             this.Priority+=size;//越往后，权越大
@@ -20,7 +20,7 @@ class PriorityQueue{
         public Node(Patient p,int a,int b){//当是否为复诊，急诊，进行对权的修改
             this.p=p;
             this.Priority+=size;
-            this.Priority-=a*FUZHEN+b*JIAJI;
+            this.Priority+=a*FUZHEN+b*JIAJI;
         }
 
         @Override
@@ -78,7 +78,6 @@ class PriorityQueue{
         if (size == array.length - 1)//当空间不够时，扩大数组长度
             enlargeArray(array.length * 2 + 1);
 
-        // Percolate up
         int hole = ++size;
         for (array[0] = x; x.compareTo(array[hole / 2]) < 0; hole /= 2)
             array[hole] = array[hole / 2];
@@ -95,7 +94,7 @@ class PriorityQueue{
             throw new RuntimeException();
 
         Node minItem = findMin();
-        array[1] = array[size--];//将最后一个元素添加到第一个
+        array[1] = array[size--];//将最后一个元素添加到第一个,并且size减一
         percolateDown(1);//然后再重新调整
 
         return minItem;
@@ -112,10 +111,11 @@ class PriorityQueue{
     public String toString() {
         return array.toString();
     }
-    public ArrayList<String> getPriorityQueue(){
-        ArrayList<String> a=new ArrayList<String>();
+
+    public ArrayList<Object> getPriorityQueue(){//上转为Object存储并返回
+        ArrayList<Object> a=new ArrayList<Object>();
         for(int i=1;i<=size;i++){
-            a.add(array[i].p.getName());
+            a.add(array[i].p);
         }
         return a;
     }

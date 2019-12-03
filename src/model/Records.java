@@ -50,7 +50,7 @@ class Records implements Serializable {
 
     public String toString() {
         return "就诊医生:" + patientID + "--" + Structure.getDoctorName(doctorID) + "\n" + "就诊时间:" + time + "\n" + "拿的药品:"
-                + medicines + "-" + Structure.getMdedicineName(medicines);
+                + medicines + "-" + Structure.getMdedicineName(medicines)+"\n医生诊断笔记：\n"+memo;
     }
 
     public int hashCode() {
