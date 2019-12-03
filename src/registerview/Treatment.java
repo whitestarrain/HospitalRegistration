@@ -370,9 +370,14 @@ public class Treatment extends JPanel {
 					return;
 				}
 
-				if (medicineBox.getSelectedIndex() == 0 || doctorBox.getSelectedIndex() == 0
+				if (!((DefaultMutableTreeNode) (tree.getSelectionPath().getLastPathComponent())).isLeaf()) {
+					JOptionPane.showMessageDialog(mainView, "请选择具体病种", "", 0);
+					return;
+				}
+
+				if (!textAreaHasSelected || medicineBox.getSelectedIndex() == 0 || doctorBox.getSelectedIndex() == 0
 						|| textField.getText().equals("")) {
-					JOptionPane.showMessageDialog(mainView, "请把选项选择完整", "", 0);
+					JOptionPane.showMessageDialog(mainView, "请把选项及内容补充完整", "", 0);
 					return;
 				}
 
@@ -382,6 +387,8 @@ public class Treatment extends JPanel {
 				Object patient = list.getSelectedValue();
 				DefaultMutableTreeNode dis = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();// 记录所选病种
 				int number = Integer.parseInt(textField_1.getText());
+				if (memo.equals("")||memo==null)
+					memo = "无";
 				if (number > mainView.gController().getMedicineNumber(medicine)) {
 					JOptionPane.showMessageDialog(mainView,
 							"药品数量不足，仅剩" + mainView.gController().getMedicineNumber(medicine), "", 0);
@@ -392,9 +399,11 @@ public class Treatment extends JPanel {
 				mainView.gController().queue_peekmin();// 弹出最小的
 				mainView.getStartPanel().ReloadListAndRecords();// 重新加载list
 
-				textArea_1.setText("请医生输入详细诊断");
-				mainView.gController().flushFile(patient, medicine, doctor, dis, memo, number);
+				mainView.gController().flushFile(patient, medicine, doctor, dis, memo, number);// 文件刷新
 
+				textArea_2.setText(mainView.gController().patientToString(dis, ""));// 更新病人列表
+				textArea_1.setText("请输入医生诊断");
+				textAreaHasSelected = false;
 			}
 		});
 	}

@@ -17,7 +17,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
     private DefaultMutableTreeNode jRoot;
     private int number = 0;// 嗯，，，优化了添加算法似乎不需要这个了
     private boolean hasModify = false;
-    private ArrayList<String> AllPatient=null;//用来临时保存某病种的所有病人ID
+    private ArrayList<String> AllPatient = null;// 用来临时保存某病种的所有病人ID
 
     public diseasesTree() {// 从默认序列文件中读取数据初始化对象
         ObjectInputStream in = null;
@@ -88,8 +88,8 @@ class diseasesTree {// 病种树类，使用HashMap存储
     }
 
     static void Trverse_noPatient(DiseaseType t, JTextArea a) {// 不返回病人的遍历方法
+        a.append(t.name + "\n");
         if (t.subDiseaseTypes != null) {
-            a.append(t.name + "\n");
             for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
                 Trverse_noPatient(tempDiseaseType, a);
             }
@@ -210,11 +210,12 @@ class diseasesTree {// 病种树类，使用HashMap存储
         parDiseaseType.removeSubDis(dele);// 移除父病种对其引用
         hasModify = true;
     }
-    private void getAllPatient(DiseaseType t){
+
+    private void getAllPatient(DiseaseType t) {
         if (t.patient != null) {
-           for(String s:t.patient){
-               AllPatient.add(s);
-           }
+            for (String s : t.patient) {
+                AllPatient.add(s);
+            }
         }
 
         if (t.subDiseaseTypes != null) {
@@ -224,9 +225,14 @@ class diseasesTree {// 病种树类，使用HashMap存储
             }
         }
     }
-    public ArrayList<String> GetAllPatient(DiseaseType t){
-        AllPatient=new ArrayList<String>();
+
+    public ArrayList<String> GetAllPatient(DiseaseType t) {
+        AllPatient = new ArrayList<String>();
         getAllPatient(t);
         return AllPatient;
+    }
+
+    DiseaseType getroot() {
+        return root;
     }
 }

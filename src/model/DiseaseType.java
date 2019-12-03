@@ -24,13 +24,11 @@ class DiseaseType implements Serializable {// 病类
         this.ID = ID;
         this.name = name;
         this.parentID = parentID;
-        this.subDiseaseTypes = null;
-        this.patient = null;
+        this.subDiseaseTypes = new ArrayList<DiseaseType>();
+        this.patient = new ArrayList<String>();
     }
 
     void addsubdesease(DiseaseType... darr) {// 添加子病
-        if (this.subDiseaseTypes == null)
-            this.subDiseaseTypes = new ArrayList<DiseaseType>();
         for (DiseaseType di : darr) {
             subDiseaseTypes.add(di);
         }
@@ -38,8 +36,6 @@ class DiseaseType implements Serializable {// 病类
     }
 
     void addpatient(String... strarr) {// 添加患病病人
-        if (this.patient == null)
-            this.patient = new ArrayList<String>();
         for (String temp : strarr) {
             this.patient.add(temp);
         }

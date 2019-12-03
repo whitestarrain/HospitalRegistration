@@ -1,8 +1,10 @@
 package model;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -248,9 +250,10 @@ public class Structure {
         priorityQueue.peekMin();
     }
 
-    public int getMedicineNumber(Object medicine){
-        return ((Medicine)medicine).number;
+    public int getMedicineNumber(Object medicine) {
+        return ((Medicine) medicine).number;
     }
+
     private void flushAlls(Object patient, Object medicine, Object doctor, DefaultMutableTreeNode dis, String memo,
             int number) {
 
@@ -259,20 +262,41 @@ public class Structure {
         String time = s.format(a);
 
         Records r = new Records(((Patient) patient).getID(), time, ((Doctor) doctor).getID(),
-                ((Medicine) medicine).getID());
+                ((Medicine) medicine).getID(),memo);
 
-        recoders.add(r);
+        recoders.add(r);// 此处更新的为总记录，因为要模拟hash表构建过程所以没有直接把hash表序列化
 
-        DiseaseType temp=(DiseaseType)(dis.getUserObject());
-        temp.addpatient(((Patient)patient).getID());
+        DiseaseType temp = (DiseaseType) (dis.getUserObject());
 
-        ((Medicine)medicine).number-=number;
+        boolean ishas = false;
+        for (String str : temp.patient) {
+            if (str.equals(((Patient) patient).getID()))
+                ishas = true;
+        }
+        if (!ishas)// 当不包括病人ID时再加入
+            temp.addpatient(((Patient) patient).getID());
+
+        ((Medicine) medicine).number -= number;//药品数量减少
     }
 
     public void flushAllFile(Object patient, Object medicine, Object doctor, DefaultMutableTreeNode dis, String memo,
-    int number){
+            int number) {
         flushAlls(patient, medicine, doctor, dis, memo, number);
 
-        //TODO更新文件
+        // TODO更新文件
+        try {
+            ObjectOutputStream out = null;
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/records.ArrayList"));
+            out.writeObject(recoders);// 此处更新的为总记录，因为要模拟hash表构建过程所以没有直接把hash表序列化
+            out.close();
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/root.DiseaseType"));
+            out.writeObject(diseases.getroot());
+            out.close();
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/medicines.ArrayList"));
+            out.writeObject(medicines);
+            out.close();
+        } catch (Exception e) {
+           throw new RuntimeException("文件更新失败");
+        }
     }
 }

@@ -33,7 +33,7 @@ class HashRecords<K, V> {
 
     int nowcapticy = 0;// 当数组中有一个位置被占用时进行自增操作
     int size = 0;
-    public static final int DEFAULT_SIZE = 10;
+    public static final int DEFAULT_SIZE = 20;
     private Object[] table;
 
     public HashRecords() {
