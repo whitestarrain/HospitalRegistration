@@ -9,6 +9,8 @@ import java.util.Arrays;
 哈希表，一个key下面有类似链表结构，用于存储信息，put时会往key下添加信息
  */
 class HashRecords<K, V> {
+    private static int RESIZE_COUNT = 0;
+
     private class Node<K, V> {
         int hash;
         K key;
@@ -33,7 +35,7 @@ class HashRecords<K, V> {
 
     int nowcapticy = 0;// 当数组中有一个位置被占用时进行自增操作
     int size = 0;
-    public static final int DEFAULT_SIZE = 20;
+    public static final int DEFAULT_SIZE = 10;
     private Object[] table;
 
     public HashRecords() {
@@ -47,39 +49,56 @@ class HashRecords<K, V> {
     }
 
     public void put(K k, V v) {
-        boolean isPut = false;
-        Node<K, V> n = new Node(hash(k), k, v);
-        int index = indexFor(n.hash, size);
-        if (table[index] == null) {// 位置为null直接占用
-            nowcapticy++;// 占用位置加一
-            table[index] = n;
-            return;
-        } else if (((Node) table[index]).equals(n)) {// 位置不为null,但key相同，往下加
-            Node<K, V> temp = (Node<K, V>) table[index];
-            while (temp.next != null) {// 到达最底部
-                temp = temp.next;
-            }
-            temp.addNext(n);
-            return;
-        } else {// key不同，找key相同的地方
-            for (int i = 0; i < size; i++) {
-                if (table[(i + index) % (size)] == null) {// 尽管如此也碰见了null的位置，说明现在table中没有当前key对应的项
-                    table[(i + index) % (size)] = n;
-                    nowcapticy++;
-                    return;
-                } else if (table[(i + index) % (size)].equals(n)) {// 找到key值相同的节点
-                    Node<K, V> temp = (Node<K, V>) table[(i + index) % (size)];
-                    while (temp != null) {// 到达最底部
-                        temp = temp.next;
-                    }
-                    temp = n;
-                    return;
-                }
-            }
-        }
-        if (nowcapticy < size) {// 能到达这一步，就说明位置不够了
+        if (nowcapticy == size) {// FIXME
+            RESIZE_COUNT++;
             reSize();
             put(k, v);
+        }
+
+        boolean isPut = false;
+        Node<K, V> n = new Node(hash(k), k, v);
+
+        int tempsize = DEFAULT_SIZE, tempindex = -1, index = -1;
+        for (int i = 0; i <= RESIZE_COUNT; i++) {// 从原始size开始找对应key值位置，找不到tempsize进行扩增
+            tempindex = indexFor(n.hash, tempsize);
+            if (table[tempindex] == null) {// 位置为null说明这个tempsize对应tempindex并不是
+                continue;
+            } else if (((Node) table[tempindex]).equals(n)) {// 位置不为null,key相同，说明这个tempsize对应tempindex就是当初装入时的
+                index = tempindex;// 找到index
+                break;
+            } else {// 当key值不相等时，一直往后找，知到到达null。
+                for (int z = tempindex; table[z % (size - 1)] != null; z++) {
+                    if (((Node) table[z % (size - 1)]).equals(n)) {
+                        index = z;// 找到index
+                        break;
+                    }
+                }
+            }
+            tempsize *= 2;
+        }
+
+        if (index == -1) {// 当hash表中没有对应key值时
+            index = indexFor(n.hash, size);
+            if (table[index] == null) {
+                table[index] = n;
+                nowcapticy++;
+                return;
+            } else {
+                for (int i = 1; i < size; i++) {
+                    if (table[(i + index) % (size - 1)] == null) {
+                        table[(i + index) % (size - 1)] = n;
+                        nowcapticy++;
+                        return;
+                    }
+                }
+            }
+        } else {// 当hash表中有对应key值时
+            Node temp = (Node) table[index];
+            while (temp.next != null) {
+                temp = temp.next;// 到达底部
+            }
+            temp.next = n;
+            return;
         }
     }
 
@@ -115,18 +134,33 @@ class HashRecords<K, V> {
     public String getRecordsToString(K akey) {
         StringBuilder bd = new StringBuilder();
         Node<K, V> temp = null;
-        int index = indexFor(hash(akey), size);
-        for (int i = 0; i < size - 1; i++) {
-            if (((Node<K, V>) table[(index + i) % (size)]) != null
-                    && ((Node<K, V>) table[(index + i) % (size)]).key.equals(akey)) {
-                temp = ((Node<K, V>) table[(index + i) % (size)]);
+        // 寻找位置
+        int tempsize = DEFAULT_SIZE, tempindex = -1, index = -1;
+        for (int i = 0; i <= RESIZE_COUNT; i++) {// 从原始size开始找对应key值位置，找不到tempsize进行扩增
+            tempindex = indexFor(hash(akey), tempsize);
+            if (table[tempindex] == null) {// 位置为null说明这个tempsize对应tempindex并不是
+                continue;
+            } else if (((Node) table[tempindex]).key.equals(akey)) {// 位置不为null,key相同，说明这个tempsize对应tempindex就是当初装入时的
+                index = tempindex;// 找到index
                 break;
+            } else {// 当key值不相等时，一直往后找，知到到达null。
+                for (int z = tempindex; table[z % (size - 1)] != null; z++) {
+                    if (((Node) table[z % (size - 1)]).key.equals(akey)) {
+                        index = z;// 找到index
+                        break;
+                    }
+                }
             }
+            tempsize *= 2;
         }
-
-        while (temp != null) {
-            bd.append(temp.value.toString() + "\n" + "=============" + "\n");
-            temp = temp.next;
+        if (index != -1) {
+            temp = (Node) table[index];
+            while (temp != null) {
+                bd.append(temp.value.toString() + "\n" + "=============" + "\n");
+                temp = temp.next;
+            }
+        } else {
+            bd.append("无");
         }
         return bd.toString();
     }
