@@ -179,22 +179,15 @@ public class Structure {
     }
 
     private void ShellSort(int gap, ArrayList<String> arr) {
-        for (int i = 0; i < arr.size(); i++) {
-            String temp = null;
-            int j = 0;
-            int n = 0;
-
-            // 进行冒泡排序
-            while (i + n * gap < arr.size()) {
-                j = i + gap;
-                while (j < arr.size() && ((patients.get(arr.get(j)).getName())
-                        .compareTo((patients.get(arr.get(i + n * gap)).getName()))) < 0) {
-                    temp = arr.get(i + n * gap);
-                    arr.set(i + n * gap, arr.get(j));
+        // 对一个gap进行冒泡排序
+        String temp = null;
+        for (int i = 0; i < arr.size(); i += gap) {
+            for (int j = i + gap; j < arr.size(); j += gap) {
+                if (((patients.get(arr.get(j)).getName()).compareTo((patients.get(arr.get(i)).getName()))) < 0) {
+                    temp = arr.get(i);
+                    arr.set(i, arr.get(j));
                     arr.set(j, temp);
-                    j++;
                 }
-                n++;
             }
         }
     }
@@ -262,7 +255,7 @@ public class Structure {
         String time = s.format(a);
 
         Records r = new Records(((Patient) patient).getID(), time, ((Doctor) doctor).getID(),
-                ((Medicine) medicine).getID(),memo);
+                ((Medicine) medicine).getID(), memo);
 
         recoders.add(r);// 此处更新的为总记录，因为要模拟hash表构建过程所以没有直接把hash表序列化
 
@@ -276,7 +269,7 @@ public class Structure {
         if (!ishas)// 当不包括病人ID时再加入
             temp.addpatient(((Patient) patient).getID());
 
-        ((Medicine) medicine).number -= number;//药品数量减少
+        ((Medicine) medicine).number -= number;// 药品数量减少
     }
 
     public void flushAllFile(Object patient, Object medicine, Object doctor, DefaultMutableTreeNode dis, String memo,
@@ -296,7 +289,7 @@ public class Structure {
             out.writeObject(medicines);
             out.close();
         } catch (Exception e) {
-           throw new RuntimeException("文件更新失败");
+            throw new RuntimeException("文件更新失败");
         }
     }
 }

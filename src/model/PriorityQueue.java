@@ -5,14 +5,14 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 class PriorityQueue{
-    public static int DEFUALT_SIZE=10;
+    public static int DEFUALT_SIZE=20;
     private Node[] array=null;
     public int size;
     private class Node implements Comparable<Node>{
-        private static final int FUZHEN=-3;
-        private static final int JIAJI=10;
+        private static final int FUZHEN=-5;
+        private static final int JIAJI=-20;
         public Patient p;
-        public int Priority=0;//这里为小堆，权越大，往后排
+        public int Priority=50;//这里为小堆，权越大，往后排
         public Node(Patient p){
             this.p=p;
             this.Priority+=size;//越往后，权越大
@@ -20,7 +20,7 @@ class PriorityQueue{
         public Node(Patient p,int a,int b){//当是否为复诊，急诊，进行对权的修改
             this.p=p;
             this.Priority+=size;
-            this.Priority+=a*FUZHEN+b*JIAJI;
+            this.Priority+=a*FUZHEN+b*JIAJI;//当是复诊以及急诊的时候优先级升高
         }
 
         @Override

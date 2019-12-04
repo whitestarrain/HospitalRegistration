@@ -51,9 +51,13 @@ public class TriagePanel extends JPanel implements ActionListener {
                             "请问 " + mainView.gController().getTheIndexOfPatients(i) + " 是否为复诊", "请选择", 0);
                     int b = JOptionPane.showConfirmDialog(triagePanel,
                             "请问 " + mainView.gController().getTheIndexOfPatients(i) + " 是否为加急病人", "请选择", 0);
-                    mainView.gController().addWaitPatientsToQueue(i, a, b);;// 将选择标识加入到数组中
+
+                    a = 1 - a;
+                    b = 1 - b;
+                    // 原来为是为0，否为1，转换为是为1，否为0
+                    mainView.gController().addWaitPatientsToQueue(i, a, b);
+                    ;// 将选择标识加入到数组中
                     i++;
-                    // 是为0，否为1
                 }
                 hasReview = true;
             }
