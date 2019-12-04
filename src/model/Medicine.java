@@ -20,8 +20,9 @@ class Medicine implements Serializable {
         this.price = price;
         this.functions = functions;
     }
-    public void  setNumber(int number){
-        this.number=number;
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public String toString() {
@@ -31,10 +32,12 @@ class Medicine implements Serializable {
     public int hashCode() {
         return Integer.valueOf(ID);
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    public String getID(){
+
+    public String getID() {
         return ID;
     }
 }

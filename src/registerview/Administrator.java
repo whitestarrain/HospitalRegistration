@@ -179,7 +179,7 @@ public class Administrator extends JPanel {
 				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) nowPath.getLastPathComponent();
 				treeModel.removeNodeFromParent(temp);// 从树中删除
 				mainView.gController().deleNode(temp);// 从文件中删除
-				//刷新树
+				// 刷新树
 				treeModel.reload();
 				mainView.getTreatment().treeReload();
 			}
@@ -190,7 +190,7 @@ public class Administrator extends JPanel {
 				String tempdis = JOptionPane.showInputDialog(mainView, "请输入病种名称");
 				DefaultMutableTreeNode tempnode = (DefaultMutableTreeNode) nowPath.getLastPathComponent();
 				tempnode.add(mainView.gController().addSubDis(tempnode, tempdis));// 修改对应HashMap，并返回子病节点引用包装后的DefaultMutableTreeNode,然后添加到当前选中的那个节点中
-				//刷新树
+				// 刷新树
 				treeModel.reload();
 				mainView.getTreatment().treeReload();
 

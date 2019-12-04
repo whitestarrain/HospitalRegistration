@@ -40,7 +40,7 @@ public class convertToFile {
         }
         System.out.println(patient);
 
-        ArrayList<Doctor>  doctors =new ArrayList<Doctor>();
+        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
         try {
             bufread = new BufferedReader(new FileReader("source/doctor.txt"));
             while ((s = bufread.readLine()) != null) {
@@ -64,7 +64,7 @@ public class convertToFile {
             bufread = new BufferedReader(new FileReader("source/medicine.txt"));
             while ((s = bufread.readLine()) != null) {
                 arrtemp = s.split(" ");
-                medicines.add( new Medicine(arrtemp[0], arrtemp[1], Integer.valueOf(arrtemp[2]),
+                medicines.add(new Medicine(arrtemp[0], arrtemp[1], Integer.valueOf(arrtemp[2]),
                         Float.valueOf(arrtemp[3]), arrtemp[4]));
             }
         } catch (IOException e) {
@@ -131,7 +131,7 @@ public class convertToFile {
             bufread = new BufferedReader(new FileReader("source/records.txt"));
             while ((s = bufread.readLine()) != null) {
                 arrtemp = s.split(" ");
-                records.add(new Records(arrtemp[0], arrtemp[1], arrtemp[2], arrtemp[3],arrtemp[4]));
+                records.add(new Records(arrtemp[0], arrtemp[1], arrtemp[2], arrtemp[3], arrtemp[4]));
             }
         } catch (IOException e) {
             System.out.println("输入流打开失败");
@@ -156,8 +156,9 @@ public class convertToFile {
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/doctors.ArrayList"));
             out.writeObject(doctors);
             out.close();
-            //有root就够了，不需要这个HashMap实例化
-            // out = new ObjectOutputStream(new FileOutputStream("objectfiles/diseases.HashMap"));
+            // 有root就够了，不需要这个HashMap实例化
+            // out = new ObjectOutputStream(new
+            // FileOutputStream("objectfiles/diseases.HashMap"));
             // out.writeObject(alldisease);
             // out.close();
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/records.ArrayList"));

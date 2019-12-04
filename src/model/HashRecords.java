@@ -121,18 +121,19 @@ class HashRecords<K, V> {
 
     public String getRecordsToString(K akey) {
         StringBuilder bd = new StringBuilder();
-        Node<K, V> temp=null;
+        Node<K, V> temp = null;
         int index = indexFor(hash(akey), size);
         for (int i = 0; i < size - 1; i++) {
-            if (((Node<K, V>) table[(index + i) % (size)])!=null&&((Node<K, V>) table[(index + i) % (size)]).key.equals(akey)) {
+            if (((Node<K, V>) table[(index + i) % (size)]) != null
+                    && ((Node<K, V>) table[(index + i) % (size)]).key.equals(akey)) {
                 temp = ((Node<K, V>) table[(index + i) % (size)]);
                 break;
             }
         }
 
-        while(temp!=null){
-            bd.append(temp.value.toString()+"\n"+"============="+"\n");
-            temp=temp.next;
+        while (temp != null) {
+            bd.append(temp.value.toString() + "\n" + "=============" + "\n");
+            temp = temp.next;
         }
         return bd.toString();
     }

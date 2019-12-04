@@ -5,10 +5,11 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 //次类用来模拟就诊的患者
-class WaitPatients{
+class WaitPatients {
     private ArrayList<Patient> queue;
-    public WaitPatients(){
-        queue=new ArrayList<Patient>();
+
+    public WaitPatients() {
+        queue = new ArrayList<Patient>();
         queueload();
     }
 
@@ -26,13 +27,16 @@ class WaitPatients{
             e.printStackTrace();
         }
     }
-    public int getsize(){
+
+    public int getsize() {
         return queue.size();
     }
-    public Patient getIndexOf(int i){
+
+    public Patient getIndexOf(int i) {
         return queue.get(i);
     }
-    public ArrayList<Patient> getAllPatients(){
+
+    public ArrayList<Patient> getAllPatients() {
         return queue;
     }
 }

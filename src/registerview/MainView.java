@@ -16,16 +16,17 @@ public class MainView extends JFrame {
     public MainView() {
         init();
     }
-    public MainView(Controller controller){
-        this.controller=controller;
+
+    public MainView(Controller controller) {
+        this.controller = controller;
         init();
     }
 
     private void init() {
         startPanel = new StartPanel(mainView);
-        administrator =new Administrator(mainView);
+        administrator = new Administrator(mainView);
         triageJPanel = new TriagePanel(mainView);
-        treatment =new Treatment(mainView);
+        treatment = new Treatment(mainView);
 
         setBounds(500, 200, 600, 550);
         add(startPanel);
@@ -51,13 +52,16 @@ public class MainView extends JFrame {
     public TriagePanel getTriPanel() {
         return triageJPanel;
     }
-    public Administrator getAdministrator(){
+
+    public Administrator getAdministrator() {
         return administrator;
     }
-    public Treatment getTreatment(){
+
+    public Treatment getTreatment() {
         return treatment;
     }
-    public Controller gController(){
+
+    public Controller gController() {
         return controller;
     }
 }

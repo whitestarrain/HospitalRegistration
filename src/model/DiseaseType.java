@@ -45,17 +45,21 @@ class DiseaseType implements Serializable {// 病类
     public String toString() {
         return name;
     }
-    public String getID(){
+
+    public String getID() {
         return ID;
     }
+
     @Override
-    public boolean equals(Object obj) {//重写equals，当ID相等就认为相同
-        return ID.equals(((DiseaseType)obj).getID());
+    public boolean equals(Object obj) {// 重写equals，当ID相等就认为相同
+        return ID.equals(((DiseaseType) obj).getID());
     }
-    public boolean removeSubDis(DiseaseType dele){//删除某子病种
+
+    public boolean removeSubDis(DiseaseType dele) {// 删除某子病种
         return subDiseaseTypes.remove(dele);
     }
-    public String getParID(){
+
+    public String getParID() {
         return parentID;
     }
 }

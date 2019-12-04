@@ -387,7 +387,7 @@ public class Treatment extends JPanel {
 				Object patient = list.getSelectedValue();
 				DefaultMutableTreeNode dis = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();// 记录所选病种
 				int number = Integer.parseInt(textField_1.getText());
-				if (memo.equals("")||memo==null)
+				if (memo.equals("") || memo == null)
 					memo = "无";
 				if (number > mainView.gController().getMedicineNumber(medicine)) {
 					JOptionPane.showMessageDialog(mainView,
