@@ -156,11 +156,6 @@ public class convertToFile {
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/doctors.ArrayList"));
             out.writeObject(doctors);
             out.close();
-            // 有root就够了，不需要这个HashMap实例化
-            // out = new ObjectOutputStream(new
-            // FileOutputStream("objectfiles/diseases.HashMap"));
-            // out.writeObject(alldisease);
-            // out.close();
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/records.ArrayList"));
             out.writeObject(records);
             out.close();

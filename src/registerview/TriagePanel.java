@@ -43,8 +43,6 @@ public class TriagePanel extends JPanel implements ActionListener {
                     return;
                 }
                 int i = 0;
-                // System.out.println(mainView.gController().gStructure().getqueue());
-                // FIXMENOTE ?成员对象的方法以及变量无法调用，在这里加.size错误,因为无法导入priority_queue包，该包不可见
 
                 while (i < mainView.gController().getWaitPatientsLength()) {
                     int a = JOptionPane.showConfirmDialog(triagePanel,

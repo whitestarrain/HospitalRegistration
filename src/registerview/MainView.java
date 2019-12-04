@@ -37,9 +37,6 @@ public class MainView extends JFrame {
         setResizable(false);
         setVisible(true);
 
-        // setLocationRelativeTo(null);
-        // setResizable(false);
-
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         startPanel.setVisible(true);
         startPanel.setEnabled(true);
