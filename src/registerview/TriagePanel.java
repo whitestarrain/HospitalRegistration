@@ -32,7 +32,7 @@ public class TriagePanel extends JPanel implements ActionListener {
         setSize(600, 500);
         this.setEnabled(false);
         this.setVisible(false);
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 40));
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 60));
     }
 
     private void setEvent() {

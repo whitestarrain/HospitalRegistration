@@ -63,7 +63,11 @@ class HashRecords<K, V> {
             return;
         } else {// key不同，找key相同的地方
             for (int i = 0; i < size; i++) {
-                if (table[(i + index) % (size)] != null && table[(i + index) % (size)].equals(n)) {// 找到key值相同的节点
+                if (table[(i + index) % (size)] == null) {// 尽管如此也碰见了null的位置，说明现在table中没有当前key对应的项
+                    table[(i + index) % (size)] = n;
+                    nowcapticy++;
+                    return;
+                } else if (table[(i + index) % (size)].equals(n)) {// 找到key值相同的节点
                     Node<K, V> temp = (Node<K, V>) table[(i + index) % (size)];
                     while (temp != null) {// 到达最底部
                         temp = temp.next;
@@ -73,18 +77,7 @@ class HashRecords<K, V> {
                 }
             }
         }
-        if (nowcapticy < size) {
-            for (int i = 0; i < size; i++) {
-                if (isPut == false && table[(index + i) % size] == null) {
-                    table[(index + i) % size] = n;
-                    isPut = true;
-                    nowcapticy++;
-                }
-                if (isPut) {
-                    return;
-                }
-            }
-        } else {
+        if (nowcapticy < size) {// 能到达这一步，就说明位置不够了
             reSize();
             put(k, v);
         }

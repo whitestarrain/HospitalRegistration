@@ -24,7 +24,7 @@ public class StartPanel extends JPanel {
 
     public void init() {
         this.setSize(600, 500);
-        setLayout(new FlowLayout(FlowLayout.CENTER, 30, 40));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 40, 60));
         administrator = new JButton("管理员");
         triage = new JButton("分诊");
         treatMent = new JButton("医生诊断");
