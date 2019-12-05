@@ -95,7 +95,7 @@ public class convertToFile {
                 dtemp = new DiseaseType(arrtemp[0], arrtemp[1], arrtemp[2]);
                 alldisease.put(arrtemp[0], dtemp);
             }
-            bufread.close();// FIXME 为何reset会报错？？
+            bufread.close();// 为何reset会报错？？
             bufread = new BufferedReader(new FileReader("source/Disease.txt"));
             while ((s = bufread.readLine()) != null) {// 添加疾病的子病种以及病人中的一方
                 arrtemp = s.split(" ");

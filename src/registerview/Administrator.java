@@ -159,8 +159,6 @@ public class Administrator extends JPanel {
 				mainView.getAdministrator().setEnabled(false);
 			}
 		});
-		// TODO 右键小菜单进行查询和修改
-		// TODO*2文本框中输入信息进行查询
 
 		inquire.addActionListener(new ActionListener() {
 

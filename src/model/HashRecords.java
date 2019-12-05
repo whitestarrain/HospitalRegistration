@@ -1,8 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 //解决问题： 泛型数组的创建
 
 /* 
@@ -55,7 +52,6 @@ class HashRecords<K, V> {
             put(k, v);
         }
 
-        boolean isPut = false;
         Node<K, V> n = new Node(hash(k), k, v);
 
         int tempsize = DEFAULT_SIZE, tempindex = -1, index = -1;
@@ -140,12 +136,12 @@ class HashRecords<K, V> {
             tempindex = indexFor(hash(akey), tempsize);
             if (table[tempindex] == null) {// 位置为null说明这个tempsize对应tempindex并不是
                 continue;
-            } else if (((Node) table[tempindex]).key.equals(akey)) {// 位置不为null,key相同，说明这个tempsize对应tempindex就是当初装入时的
+            } else if (((Node<K, V>) table[tempindex]).key.equals(akey)) {// 位置不为null,key相同，说明这个tempsize对应tempindex就是当初装入时的
                 index = tempindex;// 找到index
                 break;
             } else {// 当key值不相等时，一直往后找，知到到达null。
                 for (int z = tempindex; table[z % (size - 1)] != null; z++) {
-                    if (((Node) table[z % (size - 1)]).key.equals(akey)) {
+                    if (((Node<K, V>) table[z % (size - 1)]).key.equals(akey)) {
                         index = z;// 找到index
                         break;
                     }
@@ -154,7 +150,7 @@ class HashRecords<K, V> {
             tempsize *= 2;
         }
         if (index != -1) {
-            temp = (Node) table[index];
+            temp = (Node<K, V>) table[index];
             while (temp != null) {
                 bd.append(temp.value.toString() + "\n" + "=============" + "\n");
                 temp = temp.next;

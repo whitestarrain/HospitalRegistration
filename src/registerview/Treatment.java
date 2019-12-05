@@ -24,7 +24,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
-import javax.swing.ListModel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -32,7 +31,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 public class Treatment extends JPanel {
@@ -53,7 +51,7 @@ public class Treatment extends JPanel {
 	private JScrollPane scrollPane_4;
 	private JScrollPane scrollPane_5;
 	private JList<Object> list;
-	private DefaultListModel lm;
+	private DefaultListModel<Object> lm;
 	private JScrollPane scrollPane_2;
 	private JLabel label_7;
 	private JTextArea textArea_2;

@@ -71,7 +71,6 @@ public class StartPanel extends JPanel {
                 MainViewFrame.getStartPanel().setEnabled(false);
                 MainViewFrame.getTreatment().setVisible(true);
                 MainViewFrame.getTreatment().setEnabled(true);
-                // TODO 诊断界面要显示优先权队列，这里删了那个函数，之后补上
 
             }
         });

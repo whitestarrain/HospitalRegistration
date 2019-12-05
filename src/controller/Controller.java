@@ -3,7 +3,6 @@ package controller;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
-import javax.swing.JList;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Structure;
@@ -39,17 +38,18 @@ public class Controller {
         return structure.allPatientToString(dis, Id_or_Name);
     }
 
-    public JComboBox getMedicineComboBox() {
+    public JComboBox<Object> getMedicineComboBox() {
         return structure.getMedicineComboBox();
     }
 
-    public JComboBox getDoctorComboBox() {
+    public JComboBox<Object> getDoctorComboBox() {
         return structure.getDoctorComboBox();
     }
 
-    public int getMedicineNumber(Object medicine){
+    public int getMedicineNumber(Object medicine) {
         return structure.getMedicineNumber(medicine);
     }
+
     public int getWaitPatientsLength() {
         return structure.getWaitPatientsSize();
     }
@@ -76,8 +76,9 @@ public class Controller {
 
     public void flushFile(Object patient, Object medicine, Object doctor, DefaultMutableTreeNode dis, String memo,
             int number) {
-                structure.flushAllFile(patient, medicine, doctor, dis, memo, number);
+        structure.flushAllFile(patient, medicine, doctor, dis, memo, number);
     }
+
     public Structure gStructure() {
         return structure;
     }

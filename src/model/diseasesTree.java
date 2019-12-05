@@ -15,7 +15,6 @@ class diseasesTree {// 病种树类，使用HashMap存储
     DiseaseType whichToSearch = null;
     private DiseaseType root;
     private DefaultMutableTreeNode jRoot;
-    private int number = 0;// 嗯，，，优化了添加算法似乎不需要这个了
     private boolean hasModify = false;
     private ArrayList<String> AllPatient = null;// 用来临时保存某病种的所有病人ID
 
@@ -49,7 +48,6 @@ class diseasesTree {// 病种树类，使用HashMap存储
     }
 
     private void Trverse(DiseaseType t) {// 初始化病的数量，为ID编号方便
-        number++;
         if (t.patient != null) {
 
             // System.out.println(t.name);
@@ -202,7 +200,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
                 deleteNode(it.next());
             }
 
-            // for(DiseaseType temp:dele.subDiseaseTypes){//FIXME for循环，或者迭代时修改容器中元素导致错误
+            // for(DiseaseType temp:dele.subDiseaseTypes){// for循环，或者迭代时修改容器中元素导致错误
             // deleteNode(temp);
             // }
         }
