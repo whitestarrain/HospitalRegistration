@@ -270,6 +270,9 @@ public class Structure {
             temp.addpatient(((Patient) patient).getID());
 
         ((Medicine) medicine).number -= number;// 药品数量减少
+
+        if (patients.get(((Patient) patient).getID()) == null)//当不存在该病人id时
+            patients.put(((Patient) patient).getID(), (Patient) patient);// 因为给定的病种定义下只储存了病人ID，因此刷新为查找对应对象的HashMap
     }
 
     public void flushAllFile(Object patient, Object medicine, Object doctor, DefaultMutableTreeNode dis, String memo,
@@ -287,6 +290,9 @@ public class Structure {
             out.close();
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/medicines.ArrayList"));
             out.writeObject(medicines);
+            out.close();
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/patients.HashMap"));
+            out.writeObject(patients);
             out.close();
         } catch (Exception e) {
             throw new RuntimeException("文件更新失败");
