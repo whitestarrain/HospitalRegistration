@@ -1,14 +1,18 @@
 package model;
 
+import java.io.Serializable;
+
 //解决问题： 泛型数组的创建
 
 /* 
 哈希表，一个key下面有类似链表结构，用于存储信息，put时会往key下添加信息
  */
-class HashRecords<K, V> {
+class HashRecords<K, V> implements Serializable{
+    private static final long serialVersionUID = 2549127321778626242L;
     private static int RESIZE_COUNT = 0;
 
-    private class Node<K, V> {
+    private class Node<K, V> implements Serializable{
+        private static final long serialVersionUID = 3333846326650809393L;
         int hash;
         K key;
         V value;
@@ -32,7 +36,7 @@ class HashRecords<K, V> {
 
     int nowcapticy = 0;// 当数组中有一个位置被占用时进行自增操作
     int size = 0;
-    public static final int DEFAULT_SIZE = 10;
+    public static final int DEFAULT_SIZE = 4;
     private Object[] table;
 
     public HashRecords() {
@@ -63,8 +67,8 @@ class HashRecords<K, V> {
                 index = tempindex;// 找到index
                 break;
             } else {// 当key值不相等时，一直往后找，知到到达null。
-                for (int z = tempindex; table[z % (size - 1)] != null; z++) {
-                    if (((Node) table[z % (size - 1)]).equals(n)) {
+                for (int z = tempindex; table[z % (size)] != null; z++) {
+                    if (((Node) table[z % (size)]).equals(n)) {
                         index = z;// 找到index
                         break;
                     }
@@ -81,8 +85,8 @@ class HashRecords<K, V> {
                 return;
             } else {
                 for (int i = 1; i < size; i++) {
-                    if (table[(i + index) % (size - 1)] == null) {
-                        table[(i + index) % (size - 1)] = n;
+                    if (table[(i + index) % (size)] == null) {
+                        table[(i + index) % (size)] = n;
                         nowcapticy++;
                         return;
                     }
@@ -140,8 +144,8 @@ class HashRecords<K, V> {
                 index = tempindex;// 找到index
                 break;
             } else {// 当key值不相等时，一直往后找，知到到达null。
-                for (int z = tempindex; table[z % (size - 1)] != null; z++) {
-                    if (((Node<K, V>) table[z % (size - 1)]).key.equals(akey)) {
+                for (int z = tempindex; table[z % (size)] != null; z++) {
+                    if (((Node<K, V>) table[z % (size)]).key.equals(akey)) {
                         index = z;// 找到index
                         break;
                     }

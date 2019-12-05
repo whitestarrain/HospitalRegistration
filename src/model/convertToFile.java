@@ -143,8 +143,13 @@ public class convertToFile {
                 e.printStackTrace();
             }
         }
-
         System.out.println(records);
+
+        HashRecords<String, Records> hashrecords = new HashRecords<String, Records>();
+        for (Records r : records) {
+            hashrecords.put(r.getPatientID(), r);
+        }
+        ;
         ObjectOutputStream out = null;
         try {
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/patients.HashMap"));
@@ -162,7 +167,9 @@ public class convertToFile {
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/root.DiseaseType"));
             out.writeObject(root);
             out.close();
-
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/HashRecords"));
+            out.writeObject(hashrecords);
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -395,7 +395,7 @@ public class Treatment extends JPanel {
 				}
 
 				mainView.gController().queue_peekmin();// 弹出最小的
-				mainView.getStartPanel().ReloadListAndRecords();// 重新加载list
+				mainView.getStartPanel().ReloadListAndRecords();// 重新加载list和records
 
 				mainView.gController().flushFile(patient, medicine, doctor, dis, memo, number);// 文件刷新
 

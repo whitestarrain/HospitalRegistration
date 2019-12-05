@@ -19,11 +19,10 @@ public class Structure {
     private diseasesTree diseases;// 只在更新文件时用了下，其他时候没动过
     private static ArrayList<Medicine> medicines;// 在创建第一个类成员时初始化
     private static ArrayList<Doctor> doctors;
-    private static ArrayList<Records> recoders;
+    private static HashRecords<String, Records> hashrecords;
     private HashMap<String, Patient> patients;
     private PriorityQueue priorityQueue;
     private WaitPatients waitPatients;
-    private HashRecords<String, Records> hashrecords;
 
     static {
         try {
@@ -34,8 +33,8 @@ public class Structure {
             in = new ObjectInputStream(new FileInputStream("objectfiles/medicines.ArrayList"));
             medicines = (ArrayList<Medicine>) in.readObject();
             in.close();
-            in = new ObjectInputStream(new FileInputStream("objectfiles/records.ArrayList"));
-            recoders = (ArrayList<Records>) in.readObject();
+            in = new ObjectInputStream(new FileInputStream("objectfiles/HashRecords"));
+            hashrecords = (HashRecords<String, Records>) in.readObject();
             in.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,7 +45,6 @@ public class Structure {
     }
 
     public Structure() {
-        hashrecords = new HashRecords<String, Records>();
         diseases = new diseasesTree();
         waitPatients = new WaitPatients();
         priorityQueue = new PriorityQueue();
@@ -61,9 +59,6 @@ public class Structure {
             throw new RuntimeException("structure中成员从序列化文件中初始化失败");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
-        for (Records r : recoders) {
-            hashrecords.put(r.getPatientID(), r);
         }
     }
 
@@ -131,21 +126,6 @@ public class Structure {
 
     public void deleNode(DefaultMutableTreeNode a) {
         diseases.deleteNode((DiseaseType) a.getUserObject());
-    }
-
-    public String getRecoder(String patientID) {// 根据病人ID获得病人就医记录
-        // FIXME，就医记录写个大类，为了哈希表
-        StringBuilder bd = new StringBuilder();
-        boolean has = false;
-        for (Records r : recoders) {
-            has = true;
-            if (r.getPatientID().equals(patientID))
-                bd.append(r.toString() + "\n");
-        }
-        if (has == false) {
-            return "无就医记录";
-        }
-        return bd.toString();
     }
 
     public String allPatientToString(DiseaseType dis, String Id_or_Name) {// 堆病人进行排序
@@ -257,8 +237,7 @@ public class Structure {
         Records r = new Records(((Patient) patient).getID(), time, ((Doctor) doctor).getID(),
                 ((Medicine) medicine).getID(), memo);
 
-        recoders.add(r);// 此处更新的为总记录，因为要模拟hash表构建过程所以没有直接把hash表序列化
-
+        hashrecords.put(r.getPatientID(), r);
         DiseaseType temp = (DiseaseType) (dis.getUserObject());
 
         boolean ishas = false;
@@ -271,7 +250,7 @@ public class Structure {
 
         ((Medicine) medicine).number -= number;// 药品数量减少
 
-        if (patients.get(((Patient) patient).getID()) == null)//当不存在该病人id时
+        if (patients.get(((Patient) patient).getID()) == null)// 当不存在该病人id时
             patients.put(((Patient) patient).getID(), (Patient) patient);// 因为给定的病种定义下只储存了病人ID，因此刷新为查找对应对象的HashMap
     }
 
@@ -282,9 +261,6 @@ public class Structure {
         // TODO更新文件
         try {
             ObjectOutputStream out = null;
-            out = new ObjectOutputStream(new FileOutputStream("objectfiles/records.ArrayList"));
-            out.writeObject(recoders);// 此处更新的为总记录，因为要模拟hash表构建过程所以没有直接把hash表序列化
-            out.close();
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/root.DiseaseType"));
             out.writeObject(diseases.getroot());
             out.close();
@@ -293,6 +269,9 @@ public class Structure {
             out.close();
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/patients.HashMap"));
             out.writeObject(patients);
+            out.close();
+            out = new ObjectOutputStream(new FileOutputStream("objectfiles/HashRecords"));
+            out.writeObject(hashrecords);
             out.close();
         } catch (Exception e) {
             throw new RuntimeException("文件更新失败");
