@@ -33,7 +33,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
-public class Treatment extends JPanel {
+class Treatment extends JPanel {
 	private static final long serialVersionUID = 8864550146329822717L;
 	private MainView mainView;
 	private JTextArea textArea, textArea_1;
@@ -360,7 +360,7 @@ public class Treatment extends JPanel {
 				textArea_2.setText(mainView.gController().patientToString(selectedNode, "Name"));
 			}
 		});
-		btnNewButton.addActionListener(new ActionListener() {//确认按钮
+		btnNewButton.addActionListener(new ActionListener() {// 确认按钮
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -391,7 +391,7 @@ public class Treatment extends JPanel {
 					memo = "无";
 				if (number > mainView.gController().getMedicineNumber(medicine)) {
 					JOptionPane.showMessageDialog(mainView,
-							"药品数量不足，仅剩" + mainView.gController().getMedicineNumber(medicine), "", 0);
+							"药品数量不足，仅剩" + mainView.gController().getMedicineNumber(medicine) + ",仅给剩余数量的药品", "", 0);
 
 					number = mainView.gController().getMedicineNumber(medicine);
 				}

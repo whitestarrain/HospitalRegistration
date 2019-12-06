@@ -27,7 +27,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class Administrator extends JPanel {
+class Administrator extends JPanel {
 
 	private static final long serialVersionUID = 7029198858336373726L;
 

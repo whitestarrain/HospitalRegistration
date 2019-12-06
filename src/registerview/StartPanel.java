@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class StartPanel extends JPanel {
+class StartPanel extends JPanel {
     private static final long serialVersionUID = 5955317136594549001L;
     private MainView MainViewFrame;
     private JButton administrator;

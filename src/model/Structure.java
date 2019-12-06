@@ -16,17 +16,21 @@ import javax.swing.JTextArea;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class Structure {
-    private diseasesTree diseases;// 只在更新文件时用了下，其他时候没动过
+    private static diseasesTree diseases;// 只在更新文件时用了下，其他时候没动过
     private static ArrayList<Medicine> medicines;// 在创建第一个类成员时初始化
     private static ArrayList<Doctor> doctors;
     private static HashRecords<String, Records> hashrecords;
-    private HashMap<String, Patient> patients;
+    private static HashMap<String, Patient> patients;
     private PriorityQueue priorityQueue;
     private WaitPatients waitPatients;
 
     static {
-        try {
+        diseases = new diseasesTree();
+        try {//这些数据只要有一份进行维护就行了
             ObjectInputStream in = null;
+            in = new ObjectInputStream(new FileInputStream("objectfiles/patients.HashMap"));
+            patients = (HashMap<String, Patient>) in.readObject();
+            in.close();
             in = new ObjectInputStream(new FileInputStream("objectfiles/doctors.ArrayList"));
             doctors = (ArrayList<Doctor>) in.readObject();
             in.close();
@@ -45,21 +49,9 @@ public class Structure {
     }
 
     public Structure() {
-        diseases = new diseasesTree();
         waitPatients = new WaitPatients();
         priorityQueue = new PriorityQueue();
-        // 其他数据通过HashmMap就行了，不需要重新写新类
-        try {
-            ObjectInputStream in = null;
-            in = new ObjectInputStream(new FileInputStream("objectfiles/patients.HashMap"));
-            patients = (HashMap<String, Patient>) in.readObject();
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("structure中成员从序列化文件中初始化失败");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        // 这两个是临时数据
     }
 
     public static String getDoctorName(String ID) {
@@ -258,7 +250,6 @@ public class Structure {
             int number) {
         flushAlls(patient, medicine, doctor, dis, memo, number);
 
-        // TODO更新文件
         try {
             ObjectOutputStream out = null;
             out = new ObjectOutputStream(new FileOutputStream("objectfiles/root.DiseaseType"));

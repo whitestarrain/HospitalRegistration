@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class TriagePanel extends JPanel implements ActionListener {
+class TriagePanel extends JPanel implements ActionListener {
     private static final long serialVersionUID = -6713152977442850155L;
     private MainView mainView;
     private JButton begin;

@@ -47,7 +47,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         Trverse(this.root);
     }
 
-    private void Trverse(DiseaseType t) {// 初始化病的数量，为ID编号方便
+    private void Trverse(DiseaseType t) {// 初始化病的数量，为ID编号方便（暂时没用）
         if (t.patient != null) {
 
             // System.out.println(t.name);
@@ -121,7 +121,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
 
     private void getDisease(DiseaseType t, String s) {// 查找病类
         if (t.name.equals(s)) {
-            whichToSearch = t;
+            whichToSearch = t; // TODO用于之后报告
             return;
         }
         if (t.subDiseaseTypes != null) {
@@ -132,7 +132,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         }
     }
 
-    public String getLdleID() {// 获得闲置ID，可能是中间删除后的，也可能是最后一个
+    public String getLdleID() {// 获得闲置ID，可能是中间删除后的，也可能是最后一个  //TODO 用于之后报告 此处还可以使用队列实现。（时间空间无法满足二者）
         int i = 201;
         while (true) {
             if (getDiseaseByID(String.valueOf(i)) == null) {
@@ -185,7 +185,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
             for (DiseaseType tempDiseaseType : t.subDiseaseTypes) {
 
                 if (getDiseaseByID(tempDiseaseType, s) != null) {
-                    return getDiseaseByID(tempDiseaseType, s);
+                    return getDiseaseByID(tempDiseaseType, s);// TODO用于之后报告 不通过临时变量存储，看起来更干净，但是遍历次数翻倍
                 }
             }
         }
@@ -196,7 +196,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         if (dele.subDiseaseTypes != null) {// 当为病种文件夹时，先删除子病，再删除该病
 
             Iterator<DiseaseType> it = dele.subDiseaseTypes.iterator();
-            if (dele.subDiseaseTypes.size() > 0 && it.hasNext()) {// 使用迭代器，从而有判断size的地方
+            if (dele.subDiseaseTypes.size() > 0 && it.hasNext()) {// 使用迭代器，从而有判断size的地方//TODO用于之后报告，若空的话for高级循环会报错
                 deleteNode(it.next());
             }
 
@@ -209,7 +209,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
         hasModify = true;
     }
 
-    private void getAllPatient(DiseaseType t) {
+    private void getAllPatient(DiseaseType t) {// 用于设定所有病人
         if (t.patient != null) {
             for (String s : t.patient) {
                 AllPatient.add(s);
@@ -225,7 +225,7 @@ class diseasesTree {// 病种树类，使用HashMap存储
     }
 
     public ArrayList<String> GetAllPatient(DiseaseType t) {
-        AllPatient = new ArrayList<String>();
+        AllPatient = new ArrayList<String>();// 每执行一次就会清空 //TODO用于之后报告
         getAllPatient(t);
         return AllPatient;
     }
