@@ -79,7 +79,7 @@ public class Administrator extends JPanel {
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setViewportBorder(new LineBorder(Color.gray, 1, true));
 
-		treeModel = new DefaultTreeModel(mainView.gController().gStructure().getJTreeroot());
+		treeModel = new DefaultTreeModel(mainView.gController().getJTreeRoot());
 		tree = new JTree(treeModel);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// 设置仅单选
 
@@ -143,7 +143,7 @@ public class Administrator extends JPanel {
 					int i = JOptionPane.showConfirmDialog(mainView, "一旦离开修改将记录？请确定", "warning", 0);
 					if (i == 0) {
 						try {
-							mainView.gController().gStructure().writeToFile_Tree();
+							mainView.gController().writeToFile_Tree();
 						} catch (Exception a) {
 							a.printStackTrace();
 							throw new RuntimeException("文件重写失败");
@@ -166,7 +166,7 @@ public class Administrator extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				textArea.setText("");
 				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) nowPath.getLastPathComponent();
-				mainView.gController().gStructure().treeTrverse(temp, textArea);
+				mainView.gController().treeTrverse(temp, textArea);
 			}
 		});
 		delete.addActionListener(new ActionListener() {// 删除选项
@@ -200,7 +200,7 @@ public class Administrator extends JPanel {
 			public void valueChanged(TreeSelectionEvent e) {
 				textArea.setText("");
 				DefaultMutableTreeNode temp = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-				mainView.gController().gStructure().treeTrverse(temp, textArea);
+				mainView.gController().treeTrverse(temp, textArea);
 			}
 		});
 

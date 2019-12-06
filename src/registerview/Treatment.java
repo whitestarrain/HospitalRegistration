@@ -122,6 +122,8 @@ public class Treatment extends JPanel {
 		JLabel label_5 = new JLabel("\u836F\u54C1");
 
 		button = new JButton("\u4E0B\u4E00\u4F4D");
+		button.setVisible(false);
+		button.setEnabled(false);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
 
@@ -358,7 +360,7 @@ public class Treatment extends JPanel {
 				textArea_2.setText(mainView.gController().patientToString(selectedNode, "Name"));
 			}
 		});
-		btnNewButton.addActionListener(new ActionListener() {
+		btnNewButton.addActionListener(new ActionListener() {//确认按钮
 
 			@Override
 			public void actionPerformed(ActionEvent e) {

@@ -36,7 +36,7 @@ class HashRecords<K, V> implements Serializable{
 
     int nowcapticy = 0;// 当数组中有一个位置被占用时进行自增操作
     int size = 0;
-    public static final int DEFAULT_SIZE = 4;
+    public static int DEFAULT_SIZE = 4;
     private Object[] table;
 
     public HashRecords() {
@@ -47,10 +47,11 @@ class HashRecords<K, V> implements Serializable{
     public HashRecords(int size) {
         table = new Object[DEFAULT_SIZE];
         this.size = size;
+        DEFAULT_SIZE=size;//以指定的size为基础size
     }
 
     public void put(K k, V v) {
-        if (nowcapticy == size) {// FIXME
+        if (nowcapticy == size) {
             RESIZE_COUNT++;
             reSize();
             put(k, v);
