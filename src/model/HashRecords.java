@@ -2,7 +2,6 @@ package model;
 
 import java.io.Serializable;
 
-//解决问题： 泛型数组的创建
 
 /* 
 哈希表，一个key下面有类似链表结构，用于存储信息，put时会往key下添加信息
@@ -11,7 +10,7 @@ class HashRecords<K, V> implements Serializable{
     private static final long serialVersionUID = 2549127321778626242L;
     private static int RESIZE_COUNT = 0;
 
-    private class Node<K, V> implements Serializable{
+    private class Node<K, V> implements Serializable{//所有对象将封装到这个类中中
         private static final long serialVersionUID = 3333846326650809393L;
         int hash;
         K key;
@@ -103,7 +102,7 @@ class HashRecords<K, V> implements Serializable{
         }
     }
 
-    public void delete(K k) {
+    public void delete(K k) {//没有使用，需要修改，查找方式通过添加
         for (int i = 0; i < size; i++) {
             if (table[i] != null && table[i].equals(k)) {
                 table[i] = null;

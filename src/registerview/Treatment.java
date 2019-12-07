@@ -275,6 +275,7 @@ class Treatment extends JPanel {
 		treeModel = new DefaultTreeModel(mainView.gController().getJTreeRoot());
 		tree = new JTree(treeModel);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);// 设置仅单选
+		tree.setSelectionInterval(0, 0);
 		scrollPane.setViewportView(tree);
 		setLayout(groupLayout);
 		this.setSize(600, 500);

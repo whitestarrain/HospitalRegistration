@@ -13,9 +13,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 class diseasesTree {// 病种树类，使用HashMap存储
     DiseaseType whichToSearch = null;
-    private DiseaseType root;
-    private DefaultMutableTreeNode jRoot;
-    private boolean hasModify = false;
+    private DiseaseType root;//树的根节点
+    private DefaultMutableTreeNode jRoot;//用来临时保存得到的JTree根节点
+    private boolean hasModify = false;//树是否被修改
     private ArrayList<String> AllPatient = null;// 用来临时保存某病种的所有病人ID
 
     public diseasesTree() {// 从默认序列文件中读取数据初始化对象
@@ -146,9 +146,6 @@ class diseasesTree {// 病种树类，使用HashMap存储
         DiseaseType tempdis = getDisease(parentDis.name);// 得到父病种
         DiseaseType temp = new DiseaseType(getLdleID(), subDisNmae, tempdis.ID);// 实例化子病种
         tempdis.addsubdesease(temp);// 父病种中添加子病种引用 //一开始这里反了
-        // diseasesMap.put(tempdis.getID(),tempdis);//FIXME 不知道为什么和tempdis中的不一样
-        // 不是这里的错误，是root忘了重写
-        // System.out.println(diseasesMap);
         hasModify = true;// 将是否修改标记改为true
         return temp;
     }

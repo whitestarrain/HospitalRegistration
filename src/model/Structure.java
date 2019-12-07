@@ -120,7 +120,7 @@ public class Structure {
         diseases.deleteNode((DiseaseType) a.getUserObject());
     }
 
-    public String allPatientToString(DiseaseType dis, String Id_or_Name) {// 堆病人进行排序
+    public String allPatientToString(DiseaseType dis, String Id_or_Name) {// 对病人进行排序
         ArrayList<String> allPatient = diseases.GetAllPatient(dis);
         if (Id_or_Name.equals("Id")) {// 按ID排序,此处使用简单插入排序
             for (int i = 1; i < allPatient.size(); i++) {
